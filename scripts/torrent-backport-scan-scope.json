@@ -11,8 +11,8 @@
     "scripts/build-mcp-clients.sh": "29b0e82668f585aa46d10432912e1050954430cfac6a0550dd408d728979e113",
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
-  "closureSha256": "b29862491f453298c34eef29ab773700a3afd9bdb96115afdb3d6876977bb6b7",
-  "firstPartySourceSha256": "794ffccec6b924ae00b9a1e6f185d4513f1cd4244fa6097f81ac5cd0df660afd",
+  "closureSha256": "25a7547c1ea2576476553cf9cf5b2d681253e4a9ffa6ec2dafd0a68d4c6e586f",
+  "firstPartySourceSha256": "b7e23e50656fd6016601603e47be2322e5415f707886c3a2cd524ad48c9f1148",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -153,10 +153,16 @@
     "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged.",
     "rc129rc3SQLiteEvidenceSha256": "6e084b6964132430f272cb67641cb03339696d12c79a65bc5e879f992274c6d4",
     "rc129rc3SQLiteSummary": "Derived source binding only. Fresh exact-candidate Linux CI, six-target original/actual closure inventory, all scanners and full GitHub-hosted L3 remain required. Failed rc.2 publication retained, tag immutable; no rc.2 Release was created. Writer reservation adds no imports, changes no GoFiles or schema; new concurrency test and version literal are the other source changes. Previous canonical source identity was reproduced.",
+    "rc129rc4AutomationAdmissionEvidenceSha256": "4761ed5de80b4e7dff40f2e67c1f94edd3c9a3ce97720c1a45832983394550f3",
+    "rc129rc4AutomationAdmissionSummary": "Qualify existing reviewed source and installation test automation before the RC4 version assembly; no version/tag/Release/image publication in admission. Existing reviewed proxy/shared-script source changes only existing selectors/defaults and invocation parameters. Canonical source identity rebind preserves module, graph, closure, findings and observation window, subject to exact inventory and CI revalidation. Public paired script is d2156444.",
+    "rc129rc4LegacyUpgradeEvidenceSha256": "322fe03c1d78c85521746e3c912d87e995edfd3c3af0499a06157f728caf5638",
+    "rc129rc4LegacyUpgradeSummary": "Derived input binding before canonical six-target actual/original inventory. Linux Agent adds one runtime Go file using existing standard-library dependencies; no module, selected graph, build-target hash, existing finding or observation/expiry changes. Actual inventory, independent review, all scanners, exact CI and hosted L3 remain required.",
+    "rc129rc4LegacyUpgradeRecoveryEvidenceSha256": "9ab1b51ced4dcec3862a8c46898e5e1566c9be093c0ec9584c7c7700faa0e5e3",
+    "rc129rc4LegacyUpgradeRecoverySummary": "Fix independently confirmed FREE-1: validate and retire committed migration rollback material before readiness; cleanup failure remains closed; regression verifies restart cleanup and following failed update restores newly committed bytes. Only test Go bytes change from independently reconstructed prior inventory; exact canonical inventory/CI/L3 still required; findings/graph/dates/build identities unchanged.",
     "rc129rc4SharedScriptEvidenceSha256": "9aa985f56707740fdfa1033080988ebd509d2a34801f4cdb556e5b57eacf72c3",
     "rc129rc4SharedScriptSummary": "Derived source/build binding of the three independently reviewed candidates and release version only. Exact-candidate six-target actual/original inventory, all scanners and GitHub-hosted L3 remain required; this receipt is not publication approval. Restoring all changed Go blobs reproduces the approved rc.3 source identity; only existing script selectors/defaults and proxy invocation change. Dockerfile binds the publicly available paired script d2156444. Existing graph, closures, findings and observation window are retained subject to canonical exact-SHA validation.",
-    "rc129rc4AutomationAdmissionEvidenceSha256": "4761ed5de80b4e7dff40f2e67c1f94edd3c9a3ce97720c1a45832983394550f3",
-    "rc129rc4AutomationAdmissionSummary": "Qualify existing reviewed source and installation test automation before the RC4 version assembly; no version/tag/Release/image publication in admission. Existing reviewed proxy/shared-script source changes only existing selectors/defaults and invocation parameters. Canonical source identity rebind preserves module, graph, closure, findings and observation window, subject to exact inventory and CI revalidation. Public paired script is d2156444."
+    "rc129rc4LegacyUpgradeAssemblyEvidenceSha256": "51069c6c18b5f724145e17005dc08b1b23a7d11f1c4c5b927bfbece472f9aac8",
+    "rc129rc4LegacyUpgradeAssemblySummary": "Retain corrected reviewed runtime/test source and closure; keep all historical review receipts; rebind only the RC4 Go version literal. Existing graph, module/build hashes, 37 findings and dates unchanged. New exact-candidate independent metadata review, CI, main source admission CI, hosted L3 and public verification; this input qualification is not scanner/publication success."
   },
   "findings": [
     {

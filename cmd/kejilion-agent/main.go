@@ -45,6 +45,12 @@ func main() {
 }
 
 func run(arguments []string) error {
+	if len(arguments) > 0 && arguments[0] == "host-script-migrate" {
+		if len(arguments) != 1 {
+			return errors.New("host-script-migrate does not accept arguments")
+		}
+		return migrateSharedScript(context.Background())
+	}
 	if len(arguments) > 0 && arguments[0] == "browser-component-run" {
 		return runBrowserComponentJob(arguments[1:])
 	}
@@ -215,7 +221,9 @@ func run(arguments []string) error {
 		}
 	}
 	browserService := browsercomponent.New(browsercomponent.Config{StateDir: filepath.Join(*stateDir, "browser-component"), RuntimeDir: filepath.Join(filepath.Dir(*socketPath), "browser"), Executable: executable, DockerSocket: *dockerSocket, DockerProbe: dockerClient.Ping})
+	sharedScriptMigration := newSharedScriptMigration(*enableSystemWrites)
 	handler, err := agent.NewServer(agent.Config{
+		HostScriptReady:    sharedScriptMigration.Ready,
 		BrowserComponent:   browserService,
 		VirtualMachines:    virtualmachine.New(virtualmachine.Config{StateDir: filepath.Join(*stateDir, "virtual-machines"), Executable: executable, Enabled: *enableSystemWrites}),
 		BackupDockerSocket: *dockerSocket,
@@ -256,6 +264,7 @@ func run(arguments []string) error {
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+	go sharedScriptMigration.Run(ctx)
 	go browserService.RunNetworkReconciler(ctx)
 	if historyService != nil {
 		go historyService.Run(ctx)

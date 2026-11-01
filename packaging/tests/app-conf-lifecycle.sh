@@ -686,6 +686,45 @@ EOF
 	grep -Fx 'canshu="CN"' /usr/local/bin/k >/dev/null
 	cp /usr/local/bin/k /home/docker/kpanel/bin/kejilion.sh
 
+	if [ "${KPANEL_REQUIRE_LEGACY_MIGRATION:-0}" = 1 ] &&
+		[ "${KPANEL_LEGACY_MIGRATION_TEST_COMPLETED:-0}" != 1 ]; then
+		# Run the immutable old updater, not merely a new updater with an old
+		# unit file. The target lifecycle is installed only when it finishes.
+		(
+			# shellcheck source=/dev/null
+			. "$PROJECT_DIR/dist/test-fixtures/rc3-kpanel.conf"
+			KPANEL_MOCK_REAL_IMAGE_IDS=1 docker_app_update >"$TEST_DIR/legacy-first-upgrade.txt"
+		)
+		test "$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+		test -f /home/docker/kpanel/bin/kejilion.sh
+		! cmp -s /home/docker/kpanel/bin/kejilion.sh /usr/local/bin/k
+		cmp -s /home/docker/kpanel/bin/kpanel.conf "$PROJECT_DIR/packaging/kejilion-app/kpanel.conf"
+		# Exercise the real new Agent migration entry with a fixed clean PATH;
+		# mock commands remain confined to the surrounding lifecycle fixture.
+		[ -e /bin/bash ] || ln -s /usr/local/bin/bash /bin/bash
+		"$PROJECT_DIR/dist/test-fixtures/migration-agent" host-script-migrate
+		test "$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)" != "$shared_digest"
+		cmp -s /root/kejilion.sh /usr/local/bin/k
+		test "$(readlink /usr/bin/k)" = /usr/local/bin/k
+		grep -Fx 'canshu="CN"' /usr/local/bin/k >/dev/null
+		grep -Fx 'ENABLE_STATS="false"' /usr/local/bin/k >/dev/null
+		grep -Fx '# KPanel shared script compatibility wrapper: v1' /home/docker/kpanel/bin/kejilion.sh >/dev/null
+		test "$(stat -c '%u:%a' /home/docker/kpanel/bin/kejilion.sh)" = 0:700
+		# The following ordinary update must also work and retire the wrapper.
+		docker_app_update >"$TEST_DIR/after-legacy-migration.txt"
+		test ! -e /home/docker/kpanel/bin/kejilion.sh
+		grep -F -- '--script /usr/local/bin/k' /home/docker/kpanel/kejilion-panel-update.service >/dev/null
+		printf '%s\n' 'legacy_first_upgrade_shared_script=pass'
+		KPANEL_LEGACY_MIGRATION_TEST_COMPLETED=1
+		# Restore the following matrix's newer-SSH/legacy-private precondition.
+		printf '\n# SSH-updated shared script\n' >> /usr/local/bin/k
+		cp /usr/local/bin/k /home/docker/kpanel/bin/kejilion.sh
+		shared_digest="$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)"
+		original_links="$(systemd_link_snapshot)"
+		rm -f "$MOCK_STATE/running-id" "$MOCK_STATE/latest-id" "$MOCK_STATE/target-id" \
+			"$MOCK_STATE/rollback-tagged" "$MOCK_STATE/image-tag"
+	fi
+
 	local systemctl_lines_before=""
 	systemctl_lines_before="$(wc -l <"$KPANEL_MOCK_SYSTEMCTL_LOG")"
 	if KPANEL_MOCK_PORT_PUBLISH_FAIL=1 docker_app_update \
