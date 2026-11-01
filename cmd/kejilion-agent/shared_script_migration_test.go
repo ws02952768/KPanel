@@ -170,8 +170,23 @@ func TestSharedScriptMigrationLegacyRootfs(t *testing.T) {
 	if target, _ := os.Readlink("/usr/bin/k"); target != "/usr/local/bin/k" {
 		t.Fatal("original link was not restored")
 	}
-	if err := migrateSharedScript(ctx); err != nil {
+	// A committed wrapper followed by cleanup failure is also a possible
+	// restart state. It must stay pending until its old snapshot is retired.
+	write("/usr/local/bin/rm", "#!/bin/sh\nfor arg; do\n[ \"$arg\" != /home/docker/kpanel/bin/shared-script.rollback ] || exit 1\ndone\nexec /bin/rm \"$@\"\n", 0700)
+	if err := migrateSharedScript(ctx); err == nil {
+		t.Fatal("committed migration with stale rollback was reported as ready")
+	}
+	if _, err := os.Stat(app + "/bin/shared-script.rollback/ready"); err != nil {
+		t.Fatal("cleanup failure fixture did not retain the old snapshot")
+	}
+	if err := os.Remove("/usr/local/bin/rm"); err != nil {
 		t.Fatal(err)
+	}
+	if err := migrateSharedScript(ctx); err != nil {
+		t.Fatalf("restart after committed wrapper: %v", err)
+	}
+	if _, err := os.Lstat(app + "/bin/shared-script.rollback"); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("committed migration left a stale snapshot: %v", err)
 	}
 	got, _ = os.ReadFile("/usr/local/bin/k")
 	if !strings.Contains(string(got), "# new paired bytes") || !strings.Contains(string(got), "canshu=\"CN\"") || !strings.Contains(string(got), "ENABLE_STATS=\"false\"") {
@@ -187,6 +202,23 @@ func TestSharedScriptMigrationLegacyRootfs(t *testing.T) {
 	}
 	if err := migrateSharedScript(ctx); err != nil {
 		t.Fatalf("idempotent restart: %v", err)
+	}
+	// A later failed update must restore the newly committed shared bytes,
+	// never the pre-migration version left in the earlier snapshot.
+	write(app+"/bin/future-script", strings.ReplaceAll(next, "new paired bytes", "future paired bytes"), 0700)
+	future := exec.CommandContext(ctx, "/bin/bash", "-ec", `docker_app_plus() { :; }
+. /home/docker/kpanel/bin/kpanel.conf
+kpanel_prepare_shared_script /home/docker/kpanel/bin/future-script
+kpanel_restore_shared_script`)
+	future.Env = []string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}
+	if output, err := future.CombinedOutput(); err != nil {
+		t.Fatalf("following failed-update fixture: %v %s", err, output)
+	}
+	for _, path := range []string{"/root/kejilion.sh", "/usr/local/bin/k"} {
+		restored, _ := os.ReadFile(path)
+		if string(restored) != string(got) {
+			t.Fatalf("following update restored pre-migration bytes: %s", path)
+		}
 	}
 	if err := os.Remove(app + "/bin/kejilion.sh"); err != nil {
 		t.Fatal(err)
