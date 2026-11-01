@@ -169,7 +169,7 @@ Agent 将固定回执 `renewal_adapter_unavailable` 映射为 `site_certificate_
 
 ### 2026-11-01 v1.29.0-rc.3 内置脚本兼容修复已公开
 
-变更集 `linuxmirrors-preview-20261101`，`scriptLinkageState=coupled`。本预览版固定兼容脚本 `kejilion/sh@fb67ca69b2e66e63e160a4e60eb6aa6fe06d58b7`，根 SHA-256 `8c32a24977b4b7515d4a239b6b1100d6dd0797bef96967f19dd25289ee15ea30`、CN `9b95e51696ccd08c67aeb994b4c8746ed87499d0af1144b987fb05717cec9a09`；该兼容提交在 rc.1 的 `5b8327f` 基线上重放已公开修复 `38b9fcd` 及其 Armbian 前置 `ed58dea`。保留 FastAdmin 实现、固定模板及七文件 WAF 清单，未采用脚本主线其余更新。
+变更集 `linuxmirrors-preview-20261101`，`scriptLinkageState=coupled`。本预览版固定兼容脚本 `kejilion/sh@496d3633d850ddc68bcef654b8d9d11054a28a68`，根 SHA-256 `9cd4b90c9b1d509fba453ab7a68ef6b33cb82c24ae599031bc65430205c5b96d`、CN `9b95e51696ccd08c67aeb994b4c8746ed87499d0af1144b987fb05717cec9a09`；该兼容提交在 rc.1 的 `5b8327f` 基线上重放已公开修复 `38b9fcd` 及其 Armbian 前置 `ed58dea`。保留 FastAdmin 实现、固定模板及七文件 WAF 清单，未采用脚本主线其余更新。
 
 兼容入口先校验系统调优固定上游下载的原始摘要，再在临时副本替换 LinuxMirrors 非通用 ASCII 字符类；保留参数、stdin 与退出状态。Armbian 跳过软件源替换，不跳过其余更新动作。根/CN 同步、八语言语法和正则兼容、FastAdmin smoke 的精确本地证据由发布交付包保存；完整真机换源和 Docker 安装未验证；精确候选 CI/L3、公开产物与受限只读浏览器复核已通过，详见[本版验收](release-v1.29.0-rc.3-acceptance.md)。
 
@@ -177,4 +177,4 @@ Agent 将固定回执 `renewal_adapter_unavailable` 映射为 `site_certificate_
 
 后续纳入 `54a337da49978015b7015a4222b4669477004c9b` 的完整修复与回归（本地重放 `496d363`）：首次写入 Nginx 模板时通过 `command install` 调用系统命令，避免同名包管理函数遮蔽；重复安装保留现有 Nginx/Compose/WAF 配置，初始化失败在启动容器前返回。八语言首次安装/重复调用/摘要失败/停止边界及离线配置更新测试通过；未声明真实宿主安装已通过。已随 KPanel v1.29.0-rc.3 公开，固定产物和验证边界见本版验收记录。
 
-反代安装修复本地候选：`scriptLinkageState=coupled`，变更集 `proxy-install-feedback-20261101`。配套脚本候选 `fb67ca69b2e66e63e160a4e60eb6aa6fe06d58b7`（SHA-256 `8c32a24977b4b7515d4a239b6b1100d6dd0797bef96967f19dd25289ee15ea30`）尚未发布；禁止在脚本兼容提交公开可用前发布此 KPanel 候选。候选新增反代保留直连协议 `KPANEL_WEB_PROXY_ACCESS_PROTOCOL_VERSION=1` / `KJ_WEB_PROXY_KEEP_DIRECT=1`；旧脚本明确拒绝启动，CLI 默认仅在成功后保持原有封锁行为。依赖准备、失败停止、任务运行核验与页面状态反馈均须绑定精确候选验收；未将本地测试写作公开镜像或真机安装成功。成对回滚基线：KPanel `5948c2f845de2196c93b2b5181347f457f545561`；脚本 `19fceee107041b61ed7453024be1309e95cda4d3`。
+反代安装修复本地候选：`scriptLinkageState=coupled`，变更集 `proxy-install-feedback-20261101`。配套脚本候选 `kejilion/sh@32c99377ee09761ca476e088e45d705a8950376c`（SHA-256 `9eae37cd78a56a0630569a680e7fbabfaf4f65de59131f14747ff4d1f8d0672f`）尚未发布；禁止在脚本兼容提交公开可用前发布此 KPanel 候选。候选新增反代保留直连协议 `KPANEL_WEB_PROXY_ACCESS_PROTOCOL_VERSION=1` / `KJ_WEB_PROXY_KEEP_DIRECT=1`；旧脚本明确拒绝启动，CLI 默认仅在成功后保持原有封锁行为。依赖准备、失败停止、任务运行核验与页面状态反馈均须绑定精确候选验收；未将本地测试写作公开镜像或真机安装成功。成对回滚基线：KPanel `5948c2f845de2196c93b2b5181347f457f545561`；脚本 `19fceee107041b61ed7453024be1309e95cda4d3`。

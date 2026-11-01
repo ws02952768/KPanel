@@ -153,7 +153,7 @@ func (systemRecipeJobRunner) Run(ctx context.Context, name string, arguments ...
 
 func (systemRecipeJobRunner) LookPath(name string) (string, error) {
 	switch name {
-	case "systemd-run", "systemctl", "start-stop-daemon", "rc-service":
+	case "systemd-run", "systemctl", "start-stop-daemon", "rc-service", "docker":
 	default:
 		return "", errors.New("background control executable is not allowed")
 	}
