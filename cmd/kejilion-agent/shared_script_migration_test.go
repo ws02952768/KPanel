@@ -96,8 +96,10 @@ func TestSharedScriptMigrationLegacyRootfs(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	old := "#!/bin/sh\ncanshu=\"CN\"\npermission_granted=\"true\"\nENABLE_STATS=\"false\"\n# old shared bytes\n"
-	next := "#!/bin/sh\ncanshu=\"default\"\npermission_granted=\"true\"\nENABLE_STATS=\"true\"\n# new paired bytes\n"
+	old := "#!/bin/sh\ncanshu=\"V6\"\npermission_granted=\"true\"\nENABLE_STATS=\"true\"\n# old shared bytes\n"
+	// The old updater prefers its private script. Its extracted payload can
+	// therefore have different inherited preferences from the current SSH k.
+	next := "#!/bin/sh\ncanshu=\"CN\"\npermission_granted=\"true\"\nENABLE_STATS=\"false\"\n# new paired bytes\n"
 	write(app+"/.managed-by-kejilion-app", "", 0600)
 	write(app+"/bin/kpanel.conf", string(life), 0600)
 	write(app+"/bin/kejilion.sh", next, 0700)
@@ -189,7 +191,7 @@ func TestSharedScriptMigrationLegacyRootfs(t *testing.T) {
 		t.Fatalf("committed migration left a stale snapshot: %v", err)
 	}
 	got, _ = os.ReadFile("/usr/local/bin/k")
-	if !strings.Contains(string(got), "# new paired bytes") || !strings.Contains(string(got), "canshu=\"CN\"") || !strings.Contains(string(got), "ENABLE_STATS=\"false\"") {
+	if !strings.Contains(string(got), "# new paired bytes") || !strings.Contains(string(got), "canshu=\"V6\"") || !strings.Contains(string(got), "ENABLE_STATS=\"true\"") {
 		t.Fatalf("paired bytes/preferences not synchronized: %s", got)
 	}
 	rootScript, _ := os.ReadFile("/root/kejilion.sh")
@@ -228,5 +230,33 @@ entry`)
 	}
 	if m := newSharedScriptMigration(true); !m.Ready() {
 		t.Fatal("new lifecycle with no legacy private entry must be ready")
+	}
+	// Complete the synthetic failed-update fixture before independent cases.
+	if err := os.RemoveAll(app + "/bin/shared-script.rollback"); err != nil {
+		t.Fatal(err)
+	}
+	write(app+"/bin/kejilion.sh", old, 0700)
+	current := "#!/bin/sh\ncanshu=\"default\"\npermission_granted=\"true\"\nENABLE_STATS=\"false\"\n# current SSH defaults\n"
+	write("/usr/local/bin/k", current, 0755)
+	write("/root/kejilion.sh", current, 0755)
+	if err := migrateSharedScript(ctx); err != nil {
+		t.Fatalf("nondefault to current default preferences: %v", err)
+	}
+	got, _ = os.ReadFile("/usr/local/bin/k")
+	if !strings.Contains(string(got), "canshu=\"default\"") || !strings.Contains(string(got), "ENABLE_STATS=\"false\"") {
+		t.Fatalf("current default/opt-out preferences not applied: %s", got)
+	}
+	for _, path := range []string{"/root/kejilion.sh", "/usr/local/bin/k", "/usr/bin/k"} {
+		if err := os.Remove(path); err != nil {
+			t.Fatal(err)
+		}
+	}
+	write(app+"/bin/kejilion.sh", next, 0700)
+	if err := migrateSharedScript(ctx); err != nil {
+		t.Fatalf("legacy-only trusted preferences: %v", err)
+	}
+	got, _ = os.ReadFile("/usr/local/bin/k")
+	if !strings.Contains(string(got), "canshu=\"CN\"") || !strings.Contains(string(got), "ENABLE_STATS=\"false\"") {
+		t.Fatalf("trusted private fallback lost preferences: %s", got)
 	}
 }

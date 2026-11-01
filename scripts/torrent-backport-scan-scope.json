@@ -12,7 +12,7 @@
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
   "closureSha256": "25a7547c1ea2576476553cf9cf5b2d681253e4a9ffa6ec2dafd0a68d4c6e586f",
-  "firstPartySourceSha256": "b7e23e50656fd6016601603e47be2322e5415f707886c3a2cd524ad48c9f1148",
+  "firstPartySourceSha256": "1f1a8b4a581b70e655d6778f35750b8d589b34700272df69dd0778554f39f542",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -162,7 +162,9 @@
     "rc129rc4SharedScriptEvidenceSha256": "9aa985f56707740fdfa1033080988ebd509d2a34801f4cdb556e5b57eacf72c3",
     "rc129rc4SharedScriptSummary": "Derived source/build binding of the three independently reviewed candidates and release version only. Exact-candidate six-target actual/original inventory, all scanners and GitHub-hosted L3 remain required; this receipt is not publication approval. Restoring all changed Go blobs reproduces the approved rc.3 source identity; only existing script selectors/defaults and proxy invocation change. Dockerfile binds the publicly available paired script d2156444. Existing graph, closures, findings and observation window are retained subject to canonical exact-SHA validation.",
     "rc129rc4LegacyUpgradeAssemblyEvidenceSha256": "51069c6c18b5f724145e17005dc08b1b23a7d11f1c4c5b927bfbece472f9aac8",
-    "rc129rc4LegacyUpgradeAssemblySummary": "Retain corrected reviewed runtime/test source and closure; keep all historical review receipts; rebind only the RC4 Go version literal. Existing graph, module/build hashes, 37 findings and dates unchanged. New exact-candidate independent metadata review, CI, main source admission CI, hosted L3 and public verification; this input qualification is not scanner/publication success."
+    "rc129rc4LegacyUpgradeAssemblySummary": "Retain corrected reviewed runtime/test source and closure; keep all historical review receipts; rebind only the RC4 Go version literal. Existing graph, module/build hashes, 37 findings and dates unchanged. New exact-candidate independent metadata review, CI, main source admission CI, hosted L3 and public verification; this input qualification is not scanner/publication success.",
+    "rc129rc5PreferenceInheritanceEvidenceSha256": "fb236161d697d4d8f08cbb02060288edfa86b650fad805deaed0dcc9cb4b0a31",
+    "rc129rc5PreferenceInheritanceSummary": "Only migration test bytes and version literal; runtime Go, imports, GoFiles and production modules unchanged. Apply trusted selected preferences in both directions to already-inherited script copies; no new source/path/command selection. Fresh independent review/OCR, real rootfs matrix and canonical exact input/CI/L3/publication; source binding alone is not scanner or publication success"
   },
   "findings": [
     {
