@@ -62,6 +62,29 @@ beforeEach(() => {
 afterEach(() => wrapper?.unmount())
 
 describe('Panel access settings', () => {
+  it('shows progress and terminal access, then reports failure without blocking direct access', async () => {
+    let rejectTask!: (reason: Error) => void
+    mocks.createSite.mockImplementationOnce((_input, report) => {
+      report({ id: 'install-1', status: 'running', stage: 'installing', progress: 25, message: '正在准备 Nginx 环境',
+        events: [{ at: 'now', stage: 'installing', progress: 25, message: '检查安装依赖' }] })
+      return new Promise((_resolve, reject) => { rejectTask = reject })
+    })
+    await render()
+    await wrapper.get('input[placeholder="panel.example.com"]').setValue('panel.example.com')
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+    expect(wrapper.text()).toContain('正在准备 Nginx 环境')
+    expect(wrapper.get('progress').attributes('value')).toBe('25')
+    expect(wrapper.text()).toContain('检查安装依赖')
+    expect(wrapper.text()).toContain('前往网站页查看任务与终端')
+    rejectTask(new Error('Nginx 安装失败'))
+    await flushPromises()
+    expect(wrapper.get('[role="alert"]').text()).toContain('域名绑定失败')
+    expect(mocks.checkDomain).not.toHaveBeenCalled()
+    expect(mocks.action).not.toHaveBeenCalled()
+    expect(button('绑定并检测').attributes('disabled')).toBeUndefined()
+  })
+
   it('shows DNS records at the HTTPS domain input and tolerates a network lookup failure', async () => {
     await render()
     expect(wrapper.get('.dns-guide').text()).toContain('203.0.113.5')
@@ -85,7 +108,7 @@ describe('Panel access settings', () => {
 
     expect(mocks.createSite).toHaveBeenCalledWith({
       primaryDomain: 'panel.example.com', aliases: [], type: 'proxy', upstream: 'http://127.0.0.1:8080', enabled: true,
-    })
+    }, expect.any(Function))
     expect(mocks.checkDomain).toHaveBeenCalledWith('panel.example.com', expect.any(AbortSignal))
     expect(wrapper.text()).toContain('新地址已可用：https://panel.example.com')
     expect(mocks.navigate).not.toHaveBeenCalled()

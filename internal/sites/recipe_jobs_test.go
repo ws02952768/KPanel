@@ -147,6 +147,7 @@ func TestDirectWebsiteInvocationsUseKejilionCommands(t *testing.T) {
 		!reflect.DeepEqual(
 			proxy.environment,
 			[]string{
+				"KJ_WEB_PROXY_KEEP_DIRECT=1",
 				"KJ_WEB_NONINTERACTIVE=1",
 				"KJ_WEB_INTERACTIVE=1",
 				"KJ_WEB_RECIPE=23",

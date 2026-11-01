@@ -642,7 +642,7 @@ describe('AppsView domain binding', () => {
 
     await view.addDomain()
 
-    expect(mocks.createSite).toHaveBeenCalledWith(expect.objectContaining({ primaryDomain: 'panel.example.com', type: 'proxy' }))
+    expect(mocks.createSite).toHaveBeenCalledWith(expect.objectContaining({ primaryDomain: 'panel.example.com', type: 'proxy' }), expect.any(Function))
     expect(mocks.action).not.toHaveBeenCalled()
     expect(mocks.routerPush).toHaveBeenCalledWith('/settings?section=panel-access&domain=panel.example.com')
   })

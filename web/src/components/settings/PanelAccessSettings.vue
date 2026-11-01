@@ -9,8 +9,9 @@ import { kpanelAppID } from '@/lib/kpanelUpdate'
 import { currentPanelLocation, navigatePanel, panelAccessSection, panelDomainQuery } from '@/lib/panelAccess'
 import { useI18n } from '@/i18n'
 import DnsResolutionGuide from '@/components/common/DnsResolutionGuide.vue'
+import SiteBindingProgress from '@/components/sites/SiteBindingProgress.vue'
 import type { MessageKey } from '@/i18n/messages/zh-CN'
-import type { AppMarketItem, PanelAccessStatus, PanelDomainCheck, PublicNetworkSummary, Site } from '@/types/api'
+import type { AppMarketItem, PanelAccessStatus, PanelDomainCheck, PublicNetworkSummary, Site, SiteInstallationProgress } from '@/types/api'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -25,6 +26,7 @@ const error = ref('')
 const domainInput = ref('')
 const domainError = ref('')
 const binding = ref(false)
+const bindingProgress = ref<SiteInstallationProgress>()
 const checking = ref('')
 const check = ref<PanelDomainCheck>()
 const blockDirect = ref(true)
@@ -111,6 +113,7 @@ async function bindDomain(): Promise<void> {
   if (!hostname || !kpanelPort.value || binding.value) return
   binding.value = true
   domainError.value = ''
+  bindingProgress.value = undefined
   try {
     const created = await api.sites.create({
       primaryDomain: hostname,
@@ -118,6 +121,8 @@ async function bindDomain(): Promise<void> {
       type: 'proxy',
       upstream: `http://127.0.0.1:${kpanelPort.value}`,
       enabled: true,
+    }, (progress) => {
+      if (!controller.signal.aborted) bindingProgress.value = progress
     })
     boundSites.value = [created, ...boundSites.value.filter((site) => site.id !== created.id)]
     domainInput.value = ''
@@ -266,6 +271,7 @@ onBeforeUnmount(() => controller.abort())
           </form>
           <p class="panel-access__note">{{ i18n.t('panelAccess.domainDnsHint') }}</p>
           <DnsResolutionGuide :ipv4="publicNetwork?.ipv4" :ipv6="publicNetwork?.ipv6" />
+          <SiteBindingProgress v-if="bindingProgress" :progress="bindingProgress" />
           <p v-if="domainError" class="inline-alert inline-alert--danger" role="alert">{{ domainError }}</p>
         </template>
         <p v-else class="inline-alert inline-alert--info">{{ i18n.t('panelAccess.domainManual') }}</p>

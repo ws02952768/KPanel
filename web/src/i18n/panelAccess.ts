@@ -1,4 +1,6 @@
 export const panelAccessZhCN = {
+  'panelAccess.taskNotice': '任务在后台执行。失败时请查看原始输出，确认成功前保留面板直连。',
+  'panelAccess.viewTask': '前往网站页查看任务与终端',
   'panelAccess.title': "访问地址与 HTTPS",
   'panelAccess.description': "查看当前访问方式，为面板绑定域名，或在没有域名时启用自签 HTTPS。",
   'panelAccess.loading': "正在读取访问状态…",
@@ -64,6 +66,8 @@ export const panelAccessZhCN = {
 }
 
 export const panelAccessEnUS: Record<keyof typeof panelAccessZhCN, string> = {
+  'panelAccess.taskNotice': 'The task runs in the background. Review terminal output on failure and keep direct panel access until success is verified.',
+  'panelAccess.viewTask': 'Open Sites to view the task and terminal',
   'panelAccess.title': "Access address and HTTPS",
   'panelAccess.description': "Review how this panel is reached, bind a domain, or enable self-signed HTTPS when no domain is available.",
   'panelAccess.loading': "Loading access status…",
@@ -129,6 +133,8 @@ export const panelAccessEnUS: Record<keyof typeof panelAccessZhCN, string> = {
 }
 
 export const panelAccessZhTW: Record<keyof typeof panelAccessZhCN, string> = {
+  'panelAccess.taskNotice': '任務在背景執行。失敗時請查看原始輸出，確認成功前保留面板直連。',
+  'panelAccess.viewTask': '前往網站頁查看任務與終端',
   'panelAccess.title': "存取位址與 HTTPS",
   'panelAccess.description': "檢視目前的存取方式，為面板綁定網域，或在沒有網域時啟用自簽 HTTPS。",
   'panelAccess.loading': "正在讀取存取狀態…",

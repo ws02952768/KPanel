@@ -40,6 +40,7 @@ import {
   Wrench,
 } from '@lucide/vue'
 import PageHeader from '@/components/common/PageHeader.vue'
+import SiteBindingProgress from '@/components/sites/SiteBindingProgress.vue'
 import ModalDialog from '@/components/common/ModalDialog.vue'
 import DnsResolutionGuide from '@/components/common/DnsResolutionGuide.vue'
 import EmptyState from '@/components/feedback/EmptyState.vue'
@@ -96,6 +97,7 @@ const installPortMessage = ref('')
 const installAccess = ref<'direct' | 'domain_only'>('direct')
 const domain = ref('')
 const domainError = ref('')
+const domainProgress = ref<import('@/types/api').SiteInstallationProgress>()
 const domainWarning = ref('')
 const sitesWarning = ref('')
 const deletingDomainSite = ref<Site>()
@@ -1127,6 +1129,7 @@ async function addDomain(): Promise<void> {
   const port = selectedPort.value?.publicPort
   if (applicationTaskActive.value || !item || !port || !domain.value.trim()) return
   domainError.value = ''
+  domainProgress.value = undefined
   domainWarning.value = ''
   operation.value = 'add_domain'
   const hostname = domain.value.trim().toLowerCase()
@@ -1137,6 +1140,8 @@ async function addDomain(): Promise<void> {
       type: 'proxy',
       upstream: `http://127.0.0.1:${port}`,
       enabled: true,
+    }, (progress) => {
+      domainProgress.value = progress
     })
     sites.value = [createdSite, ...sites.value.filter((site) => site.id !== createdSite.id)]
     domain.value = ''
@@ -1724,7 +1729,8 @@ watch(windowActive, syncJobPollingForWindow)
               </button>
             </form>
             <p v-if="sitesWarning" class="field-warning">{{ sitesWarning }}</p>
-            <p v-if="domainError" class="field-error">{{ domainError }}</p>
+            <SiteBindingProgress v-if="domainProgress" :progress="domainProgress" />
+            <p v-if="domainError" class="field-error" role="alert">{{ domainError }}</p>
             <p v-if="domainWarning" class="field-warning">{{ domainWarning }}</p>
             <p v-if="!capability(selected, 'add_domain')" class="muted-note">
               {{ selected.capabilities.add_domain?.reason }}
