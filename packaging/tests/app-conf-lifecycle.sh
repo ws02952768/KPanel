@@ -27,7 +27,7 @@ cleanup() {
 	esac
 	rm -rf -- /home/docker/kpanel
 	rm -f /bin/systemctl
-	rm -f /root/kejilion.sh /usr/local/bin/k
+	rm -f /root/kejilion.sh /usr/local/bin/k /usr/bin/k
 }
 trap cleanup EXIT HUP INT TERM
 
@@ -489,14 +489,56 @@ EOF
 run_shared_script_bootstrap() {
 	local bootstrap="$TEST_DIR/shared-bootstrap"
 	printf '#!/bin/bash\n# verified image bootstrap\n' > "$bootstrap"
+	mkdir -p /home/docker/kpanel/bin
 	test ! -e /usr/local/bin/k
 	kpanel_prepare_shared_script "$bootstrap"
 	cmp "$bootstrap" /usr/local/bin/k
+	cmp "$bootstrap" /root/kejilion.sh
+	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
 	test "$(stat -c '%a' /usr/local/bin/k)" = 755
-	printf '# SSH owns subsequent updates\n' >> /usr/local/bin/k
+	kpanel_restore_shared_script
+	test ! -e /root/kejilion.sh
+	test ! -e /usr/local/bin/k
+	test ! -L /usr/bin/k
+	kpanel_clear_update_files
+	printf 'old-root-script\n' >/root/kejilion.sh
+	chmod 700 /root/kejilion.sh
+	printf 'old-host-k\n' >/usr/local/bin/k
+	chmod 755 /usr/local/bin/k
+	printf 'old-usr-bin-k\n' >/usr/bin/k
+	chmod 755 /usr/bin/k
 	cp /usr/local/bin/k "$TEST_DIR/shared-current"
+	cp /root/kejilion.sh "$TEST_DIR/root-current"
 	kpanel_prepare_shared_script "$bootstrap"
+	cmp "$bootstrap" /root/kejilion.sh
+	cmp "$bootstrap" /usr/local/bin/k
+	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
+	kpanel_restore_shared_script
 	cmp "$TEST_DIR/shared-current" /usr/local/bin/k
+	cmp "$TEST_DIR/root-current" /root/kejilion.sh
+	test "$(stat -c '%a' /root/kejilion.sh)" = 700
+	grep -Fx old-usr-bin-k /usr/bin/k >/dev/null
+	kpanel_clear_update_files
+	# Simulate a failure and a process death after replacing only the first file.
+	local failure
+	for failure in return kill; do
+		if (
+			mv() {
+				if [ "${!#}" = /usr/local/bin/k ]; then
+					[ "$failure" != kill ] || kill -KILL "$BASHPID"
+					return 1
+				fi
+				command mv "$@"
+			}
+			kpanel_prepare_shared_script "$bootstrap"
+		); then return 1; fi
+		cmp "$bootstrap" /root/kejilion.sh
+		kpanel_restore_shared_script
+		cmp "$TEST_DIR/root-current" /root/kejilion.sh
+		cmp "$TEST_DIR/shared-current" /usr/local/bin/k
+		grep -Fx old-usr-bin-k /usr/bin/k >/dev/null
+		kpanel_clear_update_files
+	done
 	chmod 777 /usr/local/bin/k
 	if kpanel_prepare_shared_script "$bootstrap"; then return 1; fi
 	chmod 755 /usr/local/bin/k
@@ -504,8 +546,9 @@ run_shared_script_bootstrap() {
 	ln -s "$TEST_DIR/shared-current" /usr/local/bin/k
 	if kpanel_prepare_shared_script "$bootstrap"; then return 1; fi
 	cmp "$TEST_DIR/shared-current" /usr/local/bin/k
-	rm /usr/local/bin/k
-	printf '%s\n' 'shared_script_bootstrap_and_preservation=pass'
+	rm /usr/local/bin/k /usr/bin/k /root/kejilion.sh
+	rmdir /home/docker/kpanel/bin
+	printf '%s\n' 'shared_script_sync_and_rollback=pass'
 }
 
 run_lifecycle() {
@@ -630,7 +673,7 @@ EOF
 	ln -s "$(readlink -f /home/docker/kpanel/kejilion-panel-update.timer)" \
 		/etc/systemd/system/timers.target.wants/kejilion-panel-update.timer
 	# Model a newer SSH-managed script and a legacy private copy. Updates and
-	# failed-update recovery must preserve the shared bytes, then retire the copy.
+	# A successful update must replace SSH-updated bytes with the paired release.
 	printf '\n# SSH-updated shared script\n' >> /usr/local/bin/k
 	local shared_digest="$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)"
 	local original_links=""
@@ -731,7 +774,10 @@ EOF
 	sed -i '/^KPANEL_SECURE_COOKIE=/d' /home/docker/kpanel/.env
 	docker_port="8080"
 	docker_app_update
-	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" != "$shared_digest"
+	shared_digest="$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)"
+	cmp /root/kejilion.sh /usr/local/bin/k
+	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
 	test ! -e /home/docker/kpanel/bin/kejilion.sh
 	test "$(/home/docker/kpanel/bin/kejilion-agent version)" = "$RELEASE_VERSION v1alpha1"
 	grep -Fx 'permission_granted="true"' /usr/local/bin/k >/dev/null
@@ -1032,6 +1078,9 @@ run_symlinked_docker_root_lifecycle() {
 
 run_failed_install() {
 	local ipv4_address="198.51.100.25"
+	printf '\n# existing SSH version before failed install\n' >> /usr/local/bin/k
+	cp -p /usr/local/bin/k "$TEST_DIR/before-failed-install-k"
+	cp -p /root/kejilion.sh "$TEST_DIR/before-failed-install-root"
 
 	systemctl() {
 		local COMMAND="$1"
@@ -1054,6 +1103,9 @@ run_failed_install() {
 	fi
 	[ ! -e /home/docker/kpanel ]
 	[ ! -e "$MOCK_STATE/network" ]
+	cmp "$TEST_DIR/before-failed-install-k" /usr/local/bin/k
+	cmp "$TEST_DIR/before-failed-install-root" /root/kejilion.sh
+	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
 }
 
 run_missing_bootstrap_token() {
