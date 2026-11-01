@@ -426,6 +426,7 @@ function openDetails(item: AppMarketItem): void {
   selectedID.value = item.id
   domain.value = ''
   domainError.value = ''
+  domainProgress.value = undefined
   domainWarning.value = ''
 }
 
@@ -1141,7 +1142,7 @@ async function addDomain(): Promise<void> {
       upstream: `http://127.0.0.1:${port}`,
       enabled: true,
     }, (progress) => {
-      domainProgress.value = progress
+      if (selectedID.value === item.id) domainProgress.value = progress
     })
     sites.value = [createdSite, ...sites.value.filter((site) => site.id !== createdSite.id)]
     domain.value = ''
