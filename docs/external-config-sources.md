@@ -169,10 +169,10 @@ Agent 将固定回执 `renewal_adapter_unavailable` 映射为 `site_certificate_
 
 ### 2026-11-01 LinuxMirrors 后续预览候选
 
-变更集 `linuxmirrors-preview-20261101`，`scriptLinkageState=coupled`。下一预览候选固定兼容脚本 `kejilion/sh@496d3633d850ddc68bcef654b8d9d11054a28a68`，根 SHA-256 `9cd4b90c9b1d509fba453ab7a68ef6b33cb82c24ae599031bc65430205c5b96d`、CN `9b95e51696ccd08c67aeb994b4c8746ed87499d0af1144b987fb05717cec9a09`；该本地兼容提交在 rc.1 的 `5b8327f` 基线上重放已公开修复 `38b9fcd` 及其 Armbian 前置 `ed58dea`。保留 FastAdmin 实现、固定模板及七文件 WAF 清单，未采用脚本主线其余更新。
+变更集 `linuxmirrors-preview-20261101`，`scriptLinkageState=coupled`。下一预览候选固定兼容脚本 `kejilion/sh@496d3633d850ddc68bcef654b8d9d11054a28a68`，根 SHA-256 `9cd4b90c9b1d509fba453ab7a68ef6b33cb82c24ae599031bc65430205c5b96d`、CN `9b95e51696ccd08c67aeb994b4c8746ed87499d0af1144b987fb05717cec9a09`；该兼容提交在 rc.1 的 `5b8327f` 基线上重放已公开修复 `38b9fcd` 及其 Armbian 前置 `ed58dea`。保留 FastAdmin 实现、固定模板及七文件 WAF 清单，未采用脚本主线其余更新。
 
 兼容入口先校验系统调优固定上游下载的原始摘要，再在临时副本替换 LinuxMirrors 非通用 ASCII 字符类；保留参数、stdin 与退出状态。Armbian 跳过软件源替换，不跳过其余更新动作。根/CN 同步、八语言语法和正则兼容、FastAdmin smoke 的精确本地证据由发布交付包保存；完整真机换源、Docker 安装、Linux CI/L3 与公开产物尚未验证。
 
-此兼容脚本目前仅有本地提交，尚未公开；必须先在脚本仓库本地合入已确认的 main 并仅推送 main，再核对公开字节，之后才能冻结并发布 KPanel。这里记录候选身份，不代表脚本或 KPanel 已发布。rc.1 的脚本及公开产物保持不变。
+兼容脚本已在脚本仓库本地合入 main，并仅推送 `refs/heads/main:refs/heads/main`；公开主线 `5e085c8c23efa01d47d58dce77535ca78017e6b6` 包含该精确兼容提交，主线文件树与此前 `777908e` 相同。匿名 GitHub contents/git-blobs API 已回读根/CN 脚本及 FastAdmin 模板，逐一匹配以上 SHA-256；实际 raw 下载与镜像内字节仍由精确候选 CI/L3 和公开产物核对验证。此记录只证明配套脚本先行公开，不代表 KPanel 已发布。rc.1 的脚本及公开产物保持不变。
 
 后续纳入 `54a337da49978015b7015a4222b4669477004c9b` 的完整修复与回归（本地重放 `496d363`）：首次写入 Nginx 模板时通过 `command install` 调用系统命令，避免同名包管理函数遮蔽；重复安装保留现有 Nginx/Compose/WAF 配置，初始化失败在启动容器前返回。八语言首次安装/重复调用/摘要失败/停止边界及离线配置更新测试通过；未声明真实宿主安装已通过。候选仍未公开。
