@@ -6,13 +6,13 @@
   "sourceManifestSha256": "3165b3c3e3fcdefe8dc52fba19a0a872eb26238692d6fedff4db2fc48ecf2580",
   "selectedGraphSha256": "b28b6ce7c6d851577e77a9abf33319be3a0e3ae727fb3ef3640d72663813d75b",
   "buildTargetFilesSha256": {
-    "Dockerfile": "8f46fd207a3454b3ee7d9124ffb3309f960d696daec32de0885899ba4f2a7601",
+    "Dockerfile": "39762a5dab8e518fb251edf058da979150ed04d597e6127c09db860e1120cf4a",
     ".github/workflows/release.yml": "f2179cdc8358290e826f92c27316b265dade18275d1e9b89f83b0917f9d73bdc",
     "scripts/build-mcp-clients.sh": "29b0e82668f585aa46d10432912e1050954430cfac6a0550dd408d728979e113",
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
   "closureSha256": "b29862491f453298c34eef29ab773700a3afd9bdb96115afdb3d6876977bb6b7",
-  "firstPartySourceSha256": "1093d537602653c43fa5a8521c3e730f8fb5af8db5a8326a4b53932008567136",
+  "firstPartySourceSha256": "90f713b9b09f64493cf4378cbc838bfb82cc8be161a3bfd07e5c215a50fec1ba",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -152,7 +152,9 @@
     "rc129rc2CommandInstallEvidenceSha256": "8ab072415d16a72f4e98e96cc6b3f2ddc253900b33f66c861ae8e35cf7f99b83",
     "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged.",
     "rc129rc3SQLiteEvidenceSha256": "6e084b6964132430f272cb67641cb03339696d12c79a65bc5e879f992274c6d4",
-    "rc129rc3SQLiteSummary": "Derived source binding only. Fresh exact-candidate Linux CI, six-target original/actual closure inventory, all scanners and full GitHub-hosted L3 remain required. Failed rc.2 publication retained, tag immutable; no rc.2 Release was created. Writer reservation adds no imports, changes no GoFiles or schema; new concurrency test and version literal are the other source changes. Previous canonical source identity was reproduced."
+    "rc129rc3SQLiteSummary": "Derived source binding only. Fresh exact-candidate Linux CI, six-target original/actual closure inventory, all scanners and full GitHub-hosted L3 remain required. Failed rc.2 publication retained, tag immutable; no rc.2 Release was created. Writer reservation adds no imports, changes no GoFiles or schema; new concurrency test and version literal are the other source changes. Previous canonical source identity was reproduced.",
+    "rc129rc4AutomationAdmissionEvidenceSha256": "4761ed5de80b4e7dff40f2e67c1f94edd3c9a3ce97720c1a45832983394550f3",
+    "rc129rc4AutomationAdmissionSummary": "Qualify existing reviewed source and installation test automation before the RC4 version assembly; no version/tag/Release/image publication in admission. Existing reviewed proxy/shared-script source changes only existing selectors/defaults and invocation parameters. Canonical source identity rebind preserves module, graph, closure, findings and observation window, subject to exact inventory and CI revalidation. Public paired script is d2156444."
   },
   "findings": [
     {
