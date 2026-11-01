@@ -89,7 +89,7 @@ func TestBBRv3StatusUsesFixedKejilionProtocol(t *testing.T) {
 	}
 	manager, _, _, _ := testManager(t, runner)
 	manager.bbrv3Script = func() (string, error) {
-		return "/home/docker/kpanel/bin/kejilion.sh", nil
+		return "/usr/local/bin/k", nil
 	}
 	status := manager.BBRv3Status(context.Background())
 	if !status.Available || !status.Supported || status.Installed {
@@ -98,7 +98,7 @@ func TestBBRv3StatusUsesFixedKejilionProtocol(t *testing.T) {
 	command := strings.Join(runner.commands, "\n")
 	for _, required := range []string{
 		"env KJ_BBRV3_NONINTERACTIVE=1",
-		"bash /home/docker/kpanel/bin/kejilion.sh bbrv3 status",
+		"bash /usr/local/bin/k bbrv3 status",
 	} {
 		if !strings.Contains(command, required) {
 			t.Fatalf("BBRv3 command missing %q: %s", required, command)
@@ -138,7 +138,7 @@ func TestBBRv3RunsAsPersistentFixedMaintenanceTask(t *testing.T) {
 	manager, _, _, stateDir := testManager(t, runner)
 	manager.executable = filepath.Join(stateDir, "kejilion-agent")
 	manager.bbrv3Script = func() (string, error) {
-		return "/home/docker/kpanel/bin/kejilion.sh", nil
+		return "/usr/local/bin/k", nil
 	}
 
 	changed, message, err := manager.startMaintenance(
@@ -162,7 +162,7 @@ func TestBBRv3RunsAsPersistentFixedMaintenanceTask(t *testing.T) {
 		"--unit=kejilion-panel-maintenance-",
 		manager.executable + " maintenance-run --state-dir " + stateDir + " bbrv3-install",
 		"env KJ_BBRV3_NONINTERACTIVE=1 LC_ALL=C.UTF-8 LANG=C.UTF-8 bash " +
-			"/home/docker/kpanel/bin/kejilion.sh bbrv3 install",
+			"/usr/local/bin/k bbrv3 install",
 	} {
 		if !strings.Contains(command, required) {
 			t.Fatalf("BBRv3 task missing %q:\n%s", required, command)

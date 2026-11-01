@@ -54,7 +54,7 @@ func TestSSHDefenseStatusUsesFixedKejilionProtocol(t *testing.T) {
 	}
 	manager, _, _, _ := testManager(t, runner)
 	manager.f2bScript = func() (string, error) {
-		return "/home/docker/kpanel/bin/kejilion.sh", nil
+		return "/usr/local/bin/k", nil
 	}
 	status := manager.SSHDefenseStatus(context.Background())
 	if !status.Available || !status.Enabled || status.Banned != 2 {
@@ -63,7 +63,7 @@ func TestSSHDefenseStatusUsesFixedKejilionProtocol(t *testing.T) {
 	command := strings.Join(runner.commands, "\n")
 	for _, required := range []string{
 		"env KJ_F2B_NONINTERACTIVE=1",
-		"bash /home/docker/kpanel/bin/kejilion.sh f2b status",
+		"bash /usr/local/bin/k f2b status",
 	} {
 		if !strings.Contains(command, required) {
 			t.Fatalf("SSH defense command missing %q: %s", required, command)

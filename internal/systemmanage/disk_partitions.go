@@ -578,12 +578,7 @@ func trustedDiskScript(content []byte) bool {
 }
 
 func findKejilionDiskScript() (string, error) {
-	candidates := []string{
-		"/home/docker/kpanel/bin/kejilion.sh",
-		"/usr/local/bin/k",
-		"/usr/bin/k",
-		"/root/kejilion.sh",
-	}
+	candidates := []string{"/usr/local/bin/k"}
 	if candidate, err := exec.LookPath("k"); err == nil {
 		candidates = append(candidates, candidate)
 	}

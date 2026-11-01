@@ -1058,7 +1058,7 @@ func storedArgumentsAllowed(action string, args []string) bool {
 
 func trustedScript() (string, error) {
 	required := []string{"KJ_LDNMP_NONINTERACTIVE", "kpanel_ldnmp_dispatch()", "KPANEL_LDNMP_RESULT"}
-	for _, candidate := range []string{"/home/docker/kpanel/bin/kejilion.sh", "/usr/local/bin/k", "/usr/bin/k", "/root/kejilion.sh"} {
+	for _, candidate := range []string{"/usr/local/bin/k"} {
 		resolved, err := filepath.EvalSymlinks(candidate)
 		if err != nil {
 			continue

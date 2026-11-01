@@ -27,7 +27,7 @@ cleanup() {
 	esac
 	rm -rf -- /home/docker/kpanel
 	rm -f /bin/systemctl
-	rm -f /root/kejilion.sh
+	rm -f /root/kejilion.sh /usr/local/bin/k
 }
 trap cleanup EXIT HUP INT TERM
 
@@ -486,6 +486,28 @@ EOF
 	printf '%s\n' "app_conf_license_inheritance=pass"
 }
 
+run_shared_script_bootstrap() {
+	local bootstrap="$TEST_DIR/shared-bootstrap"
+	printf '#!/bin/bash\n# verified image bootstrap\n' > "$bootstrap"
+	test ! -e /usr/local/bin/k
+	kpanel_prepare_shared_script "$bootstrap"
+	cmp "$bootstrap" /usr/local/bin/k
+	test "$(stat -c '%a' /usr/local/bin/k)" = 755
+	printf '# SSH owns subsequent updates\n' >> /usr/local/bin/k
+	cp /usr/local/bin/k "$TEST_DIR/shared-current"
+	kpanel_prepare_shared_script "$bootstrap"
+	cmp "$TEST_DIR/shared-current" /usr/local/bin/k
+	chmod 777 /usr/local/bin/k
+	if kpanel_prepare_shared_script "$bootstrap"; then return 1; fi
+	chmod 755 /usr/local/bin/k
+	rm /usr/local/bin/k
+	ln -s "$TEST_DIR/shared-current" /usr/local/bin/k
+	if kpanel_prepare_shared_script "$bootstrap"; then return 1; fi
+	cmp "$TEST_DIR/shared-current" /usr/local/bin/k
+	rm /usr/local/bin/k
+	printf '%s\n' 'shared_script_bootstrap_and_preservation=pass'
+}
+
 run_lifecycle() {
 	local ipv4_address="198.51.100.25"
 	local interrupted_digest="sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
@@ -607,13 +629,19 @@ EOF
 		/etc/systemd/system/multi-user.target.wants/kejilion-agent.service
 	ln -s "$(readlink -f /home/docker/kpanel/kejilion-panel-update.timer)" \
 		/etc/systemd/system/timers.target.wants/kejilion-panel-update.timer
+	# Model a newer SSH-managed script and a legacy private copy. Updates and
+	# failed-update recovery must preserve the shared bytes, then retire the copy.
+	printf '\n# SSH-updated shared script\n' >> /usr/local/bin/k
+	local shared_digest="$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)"
 	local original_links=""
 	original_links="$(systemd_link_snapshot)"
-	test -x /home/docker/kpanel/bin/kejilion.sh
-	test "$(stat -c '%a' /home/docker/kpanel/bin/kejilion.sh)" = 700
-	grep -Fx 'permission_granted="true"' /home/docker/kpanel/bin/kejilion.sh >/dev/null
-	grep -Fx 'ENABLE_STATS="false"' /home/docker/kpanel/bin/kejilion.sh >/dev/null
-	grep -Fx 'canshu="CN"' /home/docker/kpanel/bin/kejilion.sh >/dev/null
+	test -x /usr/local/bin/k
+	test ! -e /home/docker/kpanel/bin/kejilion.sh
+	test "$(stat -c '%a' /usr/local/bin/k)" = 755
+	grep -Fx 'permission_granted="true"' /usr/local/bin/k >/dev/null
+	grep -Fx 'ENABLE_STATS="false"' /usr/local/bin/k >/dev/null
+	grep -Fx 'canshu="CN"' /usr/local/bin/k >/dev/null
+	cp /usr/local/bin/k /home/docker/kpanel/bin/kejilion.sh
 
 	local systemctl_lines_before=""
 	systemctl_lines_before="$(wc -l <"$KPANEL_MOCK_SYSTEMCTL_LOG")"
@@ -703,8 +731,10 @@ EOF
 	sed -i '/^KPANEL_SECURE_COOKIE=/d' /home/docker/kpanel/.env
 	docker_port="8080"
 	docker_app_update
+	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	test ! -e /home/docker/kpanel/bin/kejilion.sh
 	test "$(/home/docker/kpanel/bin/kejilion-agent version)" = "$RELEASE_VERSION v1alpha1"
-	grep -Fx 'permission_granted="true"' /home/docker/kpanel/bin/kejilion.sh >/dev/null
+	grep -Fx 'permission_granted="true"' /usr/local/bin/k >/dev/null
 	grep -F -- '- "18080:8080"' /home/docker/kpanel/docker-compose.yml >/dev/null
 	grep -Fx 'KPANEL_SECURE_COOKIE=false' \
 		/home/docker/kpanel/.env >/dev/null
@@ -716,6 +746,8 @@ EOF
 		/home/docker/kpanel/.env
 	sed -i '/^KPANEL_SECURE_COOKIE=/d' /home/docker/kpanel/.env
 	docker_app_update
+	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	test ! -e /home/docker/kpanel/bin/kejilion.sh
 	grep -Fx 'KPANEL_SECURE_COOKIE=true' /home/docker/kpanel/.env >/dev/null
 	grep -Fx 'KPANEL_PUBLIC_URL=https://panel.example.com' /home/docker/kpanel/.env >/dev/null
 	cp -p /home/docker/kpanel/.env "$TEST_DIR/https-env"
@@ -788,6 +820,7 @@ EOF
 	grep -Fx 'mutated-panel-data' \
 		/home/docker/kpanel/data/panel/rollback-marker >/dev/null
 	kpanel_recover_automatic_update >"$TEST_DIR/interrupted-recovery-output.txt"
+	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
 	grep -Fx 'original-panel-data' \
 		/home/docker/kpanel/data/panel/rollback-marker >/dev/null
 	grep -Fx 'original-agent-data' \
@@ -1208,6 +1241,7 @@ export KPANEL_MOCK_SYSTEMCTL_LOG="$TEST_DIR/systemctl.log"
 mkdir -p /home/docker/kpanel
 bash "$PROJECT_DIR/packaging/tests/app-conf-lock-compat.sh" "$PROJECT_DIR"
 run_license_inheritance
+run_shared_script_bootstrap
 run_mount_detection
 run_lifecycle
 run_symlinked_docker_root_lifecycle

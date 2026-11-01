@@ -615,15 +615,7 @@ func parseCatalog(output []byte) (Catalog, error) {
 }
 
 func findScript() (string, error) {
-	candidates := []string{
-		"/home/docker/kpanel/bin/kejilion.sh",
-		"/usr/local/bin/k",
-		"/usr/bin/k",
-		"/root/kejilion.sh",
-	}
-	if path, err := exec.LookPath("k"); err == nil {
-		candidates = append(candidates, path)
-	}
+	candidates := []string{"/usr/local/bin/k"}
 	seen := make(map[string]bool)
 	for _, candidate := range candidates {
 		resolved, err := filepath.EvalSymlinks(candidate)

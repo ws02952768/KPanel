@@ -1158,15 +1158,7 @@ func (m *Manager) systemResourceScript() (string, int, error) {
 }
 
 func findKejilionSystemResourceScript() (string, error) {
-	candidates := []string{
-		"/home/docker/kpanel/bin/kejilion.sh",
-		"/usr/local/bin/k",
-		"/usr/bin/k",
-		"/root/kejilion.sh",
-	}
-	if path, err := exec.LookPath("k"); err == nil {
-		candidates = append(candidates, path)
-	}
+	candidates := []string{"/usr/local/bin/k"}
 	seen := make(map[string]bool)
 	for _, candidate := range candidates {
 		candidate = filepath.Clean(candidate)

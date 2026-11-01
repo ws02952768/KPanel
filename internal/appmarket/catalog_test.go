@@ -469,14 +469,10 @@ func TestDynamicBuiltinUsesTheExistingKejilionSelectorPipeline(t *testing.T) {
 	}
 }
 
-func TestManagedScriptRemainsDefaultAndHostScriptIsFallback(t *testing.T) {
+func TestOnlySharedHostScriptIsSelected(t *testing.T) {
 	candidates := preferredKejilionScriptCandidates()
-	if len(candidates) < 4 {
-		t.Fatalf("script candidate list is incomplete: %#v", candidates)
-	}
-	if candidates[0] != "/home/docker/kpanel/bin/kejilion.sh" ||
-		candidates[1] != "/usr/local/bin/k" {
-		t.Fatalf("managed script must remain the default with the host script as fallback: %#v", candidates)
+	if len(candidates) != 1 || candidates[0] != "/usr/local/bin/k" {
+		t.Fatalf("all application actions must use the shared host script: %#v", candidates)
 	}
 }
 

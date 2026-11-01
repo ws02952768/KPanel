@@ -756,9 +756,6 @@ func findKejilionInteractiveManageScript() (string, error) {
 
 func findKejilionScriptMatching(compatible func([]byte) bool) (string, error) {
 	candidates := preferredKejilionScriptCandidates()
-	if path, err := exec.LookPath("k"); err == nil {
-		candidates = append(candidates, path)
-	}
 	seen := make(map[string]bool)
 	for _, candidate := range candidates {
 		resolved, err := filepath.EvalSymlinks(candidate)
@@ -788,12 +785,7 @@ func findKejilionScriptMatching(compatible func([]byte) bool) (string, error) {
 }
 
 func preferredKejilionScriptCandidates() []string {
-	return []string{
-		"/home/docker/kpanel/bin/kejilion.sh",
-		"/usr/local/bin/k",
-		"/usr/bin/k",
-		"/root/kejilion.sh",
-	}
+	return []string{"/usr/local/bin/k"}
 }
 
 func appScriptCompatible(
