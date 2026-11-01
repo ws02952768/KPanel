@@ -12,7 +12,7 @@
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
   "closureSha256": "25a7547c1ea2576476553cf9cf5b2d681253e4a9ffa6ec2dafd0a68d4c6e586f",
-  "firstPartySourceSha256": "52d5d6994db3ae58b7a54704154b82e641804e9b50468972e5eca3d63914aa79",
+  "firstPartySourceSha256": "17e0afffceba6ce260dfd5fd726bdc62d8b867633b22606d450ff5fc5527c818",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -156,7 +156,9 @@
     "rc129rc4AutomationAdmissionEvidenceSha256": "4761ed5de80b4e7dff40f2e67c1f94edd3c9a3ce97720c1a45832983394550f3",
     "rc129rc4AutomationAdmissionSummary": "Qualify existing reviewed source and installation test automation before the RC4 version assembly; no version/tag/Release/image publication in admission. Existing reviewed proxy/shared-script source changes only existing selectors/defaults and invocation parameters. Canonical source identity rebind preserves module, graph, closure, findings and observation window, subject to exact inventory and CI revalidation. Public paired script is d2156444.",
     "rc129rc4LegacyUpgradeEvidenceSha256": "322fe03c1d78c85521746e3c912d87e995edfd3c3af0499a06157f728caf5638",
-    "rc129rc4LegacyUpgradeSummary": "Derived input binding before canonical six-target actual/original inventory. Linux Agent adds one runtime Go file using existing standard-library dependencies; no module, selected graph, build-target hash, existing finding or observation/expiry changes. Actual inventory, independent review, all scanners, exact CI and hosted L3 remain required."
+    "rc129rc4LegacyUpgradeSummary": "Derived input binding before canonical six-target actual/original inventory. Linux Agent adds one runtime Go file using existing standard-library dependencies; no module, selected graph, build-target hash, existing finding or observation/expiry changes. Actual inventory, independent review, all scanners, exact CI and hosted L3 remain required.",
+    "rc129rc4LegacyUpgradeRecoveryEvidenceSha256": "9ab1b51ced4dcec3862a8c46898e5e1566c9be093c0ec9584c7c7700faa0e5e3",
+    "rc129rc4LegacyUpgradeRecoverySummary": "Fix independently confirmed FREE-1: validate and retire committed migration rollback material before readiness; cleanup failure remains closed; regression verifies restart cleanup and following failed update restores newly committed bytes. Only test Go bytes change from independently reconstructed prior inventory; exact canonical inventory/CI/L3 still required; findings/graph/dates/build identities unchanged."
   },
   "findings": [
     {

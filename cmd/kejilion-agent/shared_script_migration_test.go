@@ -207,9 +207,12 @@ func TestSharedScriptMigrationLegacyRootfs(t *testing.T) {
 	// never the pre-migration version left in the earlier snapshot.
 	write(app+"/bin/future-script", strings.ReplaceAll(next, "new paired bytes", "future paired bytes"), 0700)
 	future := exec.CommandContext(ctx, "/bin/bash", "-ec", `docker_app_plus() { :; }
+entry() {
 . /home/docker/kpanel/bin/kpanel.conf
 kpanel_prepare_shared_script /home/docker/kpanel/bin/future-script
-kpanel_restore_shared_script`)
+kpanel_restore_shared_script
+}
+entry`)
 	future.Env = []string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}
 	if output, err := future.CombinedOutput(); err != nil {
 		t.Fatalf("following failed-update fixture: %v %s", err, output)
