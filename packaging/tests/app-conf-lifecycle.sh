@@ -675,7 +675,7 @@ EOF
 	# Model a newer SSH-managed script and a legacy private copy. Updates and
 	# A successful update must replace SSH-updated bytes with the paired release.
 	printf '\n# SSH-updated shared script\n' >> /usr/local/bin/k
-	local shared_digest="$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)"
+	local shared_digest="$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)"
 	local original_links=""
 	original_links="$(systemd_link_snapshot)"
 	test -x /usr/local/bin/k
@@ -774,8 +774,8 @@ EOF
 	sed -i '/^KPANEL_SECURE_COOKIE=/d' /home/docker/kpanel/.env
 	docker_port="8080"
 	docker_app_update
-	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" != "$shared_digest"
-	shared_digest="$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)"
+	test "$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)" != "$shared_digest"
+	shared_digest="$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)"
 	cmp /root/kejilion.sh /usr/local/bin/k
 	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
 	test ! -e /home/docker/kpanel/bin/kejilion.sh
@@ -792,7 +792,7 @@ EOF
 		/home/docker/kpanel/.env
 	sed -i '/^KPANEL_SECURE_COOKIE=/d' /home/docker/kpanel/.env
 	docker_app_update
-	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	test "$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
 	test ! -e /home/docker/kpanel/bin/kejilion.sh
 	grep -Fx 'KPANEL_SECURE_COOKIE=true' /home/docker/kpanel/.env >/dev/null
 	grep -Fx 'KPANEL_PUBLIC_URL=https://panel.example.com' /home/docker/kpanel/.env >/dev/null
@@ -847,6 +847,9 @@ EOF
 	rm -f "$MOCK_STATE/rollback-tagged" "$MOCK_STATE/image-tag" \
 		"$MOCK_STATE/automatic-target-started" "$MOCK_STATE/automatic-restored" \
 		"$MOCK_STATE/automatic-data-mutated" "$MOCK_STATE/automatic-crashed"
+	printf '\n# SSH version before interrupted update\n' >> /usr/local/bin/k
+	cp -p /usr/local/bin/k /root/kejilion.sh
+	shared_digest="$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)"
 	if (
 		KJ_KPANEL_AUTOMATIC=1 \
 		KJ_KPANEL_TARGET_VERSION=9.9.8 \
@@ -866,7 +869,9 @@ EOF
 	grep -Fx 'mutated-panel-data' \
 		/home/docker/kpanel/data/panel/rollback-marker >/dev/null
 	kpanel_recover_automatic_update >"$TEST_DIR/interrupted-recovery-output.txt"
-	test "$(sha256sum /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	test "$("$KPANEL_REAL_SHA256" /usr/local/bin/k | cut -d ' ' -f1)" = "$shared_digest"
+	cmp /root/kejilion.sh /usr/local/bin/k
+	test "$(readlink /usr/bin/k)" = /usr/local/bin/k
 	grep -Fx 'original-panel-data' \
 		/home/docker/kpanel/data/panel/rollback-marker >/dev/null
 	grep -Fx 'original-agent-data' \
