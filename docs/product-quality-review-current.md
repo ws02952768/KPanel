@@ -5,9 +5,19 @@
 > 不再作为当前门槛。run-41 已按用户要求封存 incomplete，没有 confirmed 新发现；不宣称完整覆盖或风险关闭。
 > 产品验证与已证实漏洞处置要求继续有效。
 
-- 复核日期：`2026-10-31`
-- 基线提交：`52015445b78315e7567e48703c9dfe2d9bfe2f00`
+- 复核日期：`2026-11-01`
+- 基线提交：`fd7033717f6f47d66277da760e7d255bd85d3c25`
 - 基线版本：`v1.28.0`
+
+### 2026-11-01 v1.29.0-rc.3 脚本兼容、AI并发与 HTTPS 指引预览已公开
+
+[v1.29.0-rc.3](https://github.com/kejilion/KPanel/releases/tag/v1.29.0-rc.3) 已公开，产品 `fd7033717f6f47d66277da760e7d255bd85d3c25`，版本/preview digest `sha256:4d6ed51757f6d4d9f91981a1e4c376265f7ca269c16d97d1e5e82f65f4aade64`，Release ID 430453650。候选CI、GitHub-hosted完整L3、main/tag、主线CI、双架构镜像、19附件及公开浏览器150项检查通过，run41285840378/attempt1。原发布run的公开浏览器首次终端页缺tab失败，外层FAIL保留；唯一受限只读复核run41290512546/attempt1在相同镜像、断言和3个控制器资源字节下150项通过。首开终端风险仍needs-validation，负责人KPanel release maintainers、截至2026-11-03；再现时停止追加fresh-host尝试，先补诊断及定位，不将复核通过冒充修复。稳定默认仍v1.28.0，未连接/部署生产；详见[本版验收](release-v1.29.0-rc.3-acceptance.md)。
+
+- 业务：内置兼容脚本 `496d3633d850ddc68bcef654b8d9d11054a28a68` 纳入 LinuxMirrors 正则修复、Armbian 软件源保留、command install 与重复安装配置保护；HTTPS域名区复用DNS记录指引，公网地址失败不阻断输入。补充修复AI并发创建任务SQLite锁冲突，保留单会话活动任务互斥。无API/数据格式/Agent权限或默认通道变化。
+- 跨仓库：coupled，脚本先仅通过main:main公开于 `5e085c8c23efa01d47d58dce77535ca78017e6b6`，匿名根/CN/模板摘要及镜像实际消费已核对；保留FastAdmin函数、固定包/模板与既有WAF清单，不采用脚本主线其他WAF更新。
+- 验证：八语言兼容/安装/完整性/失败停止与配置更新回归通过，真实Linux install及三次Nginx语法校验通过并清理临时容器；Web3350项通过、6项既有skip。主体及扩大范围复核的证据与边界分别记录，未把本地准备通过冒充完整发布。
+- 体验：原有组件和语言资源，14/13/12px，窄屏guide与scroll均320px、page均380px，Tab焦点3px；mock空IP场景和单元测试A/AAAA/失败状态。原生200%专项、其他主题/语言和截图未验证；不外推完整可访问性覆盖。
+- 恢复与风险：重复安装保留既有Nginx/Compose/WAF，初始化失败在启动容器前返回；全宿主换源/Docker/LDNMP/TLS、认证登录与物理ARM64未覆盖。较宽调优smoke的SSH-service夹具在旧基线同样失败，未改记为通过。PHP74、部分FastAdmin失败后人工恢复、上一预览首次PowerShell启动/Agent502根因仍保留，不因本轮通过关闭。AI原代码回归复现517/5后，写入预留修复在Linux200轮/整包、Windows20轮及独立取消/retry测试通过。候选AI安全盲审H0/M2/L0，1项既有中级历史总量预算待办截至2026-11-08，1项外键线索被反证；未声称全面安全。rc.2只有失败前创建的标签，无Release，原证据保留；本次使用rc.3且未覆盖既有版本。当前RC列车保留，来源归档与文档主线CI按独立证据收尾。
 
 ### 2026-10-31 v1.29.0-rc.1 FastAdmin 配套预览已公开
 
