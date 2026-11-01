@@ -153,7 +153,7 @@
     "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged.",
     "rc129rc3SQLiteEvidenceSha256": "6e084b6964132430f272cb67641cb03339696d12c79a65bc5e879f992274c6d4",
     "rc129rc3SQLiteSummary": "Derived source binding only. Fresh exact-candidate Linux CI, six-target original/actual closure inventory, all scanners and full GitHub-hosted L3 remain required. Failed rc.2 publication retained, tag immutable; no rc.2 Release was created. Writer reservation adds no imports, changes no GoFiles or schema; new concurrency test and version literal are the other source changes. Previous canonical source identity was reproduced.",
-    "rc129rc4SharedScriptEvidenceSha256": "e1a23d5be641e69ce30c8304496477ebf7538ac59a14fd2eae9bffdad429c355",
+    "rc129rc4SharedScriptEvidenceSha256": "9aa985f56707740fdfa1033080988ebd509d2a34801f4cdb556e5b57eacf72c3",
     "rc129rc4SharedScriptSummary": "Derived source/build binding of the three independently reviewed candidates and release version only. Exact-candidate six-target actual/original inventory, all scanners and GitHub-hosted L3 remain required; this receipt is not publication approval. Restoring all changed Go blobs reproduces the approved rc.3 source identity; only existing script selectors/defaults and proxy invocation change. Dockerfile binds the publicly available paired script d2156444. Existing graph, closures, findings and observation window are retained subject to canonical exact-SHA validation."
   },
   "findings": [
