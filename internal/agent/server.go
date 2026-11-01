@@ -47,6 +47,7 @@ const (
 )
 
 type Config struct {
+	HostScriptReady      func() bool
 	BrowserComponent     *browsercomponent.Service
 	VirtualMachines      *virtualmachine.Service
 	Token                []byte
@@ -99,6 +100,7 @@ type monitoringChecksProvider interface {
 }
 
 type Server struct {
+	hostScriptReady   func() bool
 	browserComponent  *browsercomponent.Service
 	tokenHash         [32]byte
 	version           string
@@ -257,6 +259,7 @@ func NewServer(config Config) (*Server, error) {
 		config.VirtualMachines = virtualmachine.New(virtualmachine.Config{})
 	}
 	server := &Server{
+		hostScriptReady:       config.HostScriptReady,
 		browserComponent:      config.BrowserComponent,
 		virtualMachineService: config.VirtualMachines,
 		vmConsoleGate:         make(chan struct{}, 4),
@@ -359,6 +362,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	isBackup := r.URL.Path == "/v1/backups" || strings.HasPrefix(r.URL.Path, "/v1/backups/")
 	isTerminalClose := r.Method == "POST" && strings.HasPrefix(r.URL.Path, "/v1/terminals/") && strings.HasSuffix(r.URL.Path, "/close")
 	isTerminalResize := r.Method == "POST" && strings.HasPrefix(r.URL.Path, "/v1/terminals/") && strings.HasSuffix(r.URL.Path, "/resize")
+	if r.Method != http.MethodGet && r.Method != http.MethodHead && r.Method != http.MethodOptions &&
+		!isTerminalClose && !isTerminalResize && !strings.HasPrefix(r.URL.Path, "/v1/self-update") &&
+		s.hostScriptReady != nil && !s.hostScriptReady() {
+		writeProblem(w, requestID, http.StatusServiceUnavailable, "host_script_migration_pending", "宿主脚本迁移尚未完成，请稍后重试或检查 Agent 日志", "")
+		return
+	}
 	// Existing PTY controls must remain reachable while input is blocked. They
 	// cannot admit new workers during backup, whose admission check still sees
 	// Manager.Busy until the terminal closes. Resize must not hold up close.

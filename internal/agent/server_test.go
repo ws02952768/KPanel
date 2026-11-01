@@ -37,6 +37,37 @@ func TestBearerRequired(t *testing.T) {
 	}
 }
 
+func TestHostScriptMigrationGatesWritesAfterAuthentication(t *testing.T) {
+	server := testServer(t)
+	ready := false
+	server.hostScriptReady = func() bool { return ready }
+	request := func(method, path string, authenticated bool) *httptest.ResponseRecorder {
+		r := httptest.NewRequest(method, path, nil)
+		if authenticated {
+			r.Header.Set("Authorization", "Bearer "+strings.Repeat("x", 32))
+		}
+		w := httptest.NewRecorder()
+		server.ServeHTTP(w, r)
+		return w
+	}
+	if got := request(http.MethodPost, "/v1/docker/tasks", false); got.Code != http.StatusUnauthorized {
+		t.Fatalf("migration leaked before authentication: %d", got.Code)
+	}
+	if got := request(http.MethodGet, "/v1/health", true); got.Code != http.StatusOK {
+		t.Fatalf("old updater health probe blocked: %d %s", got.Code, got.Body.String())
+	}
+	if got := request(http.MethodPost, "/v1/docker/tasks", true); got.Code != http.StatusServiceUnavailable || !strings.Contains(got.Body.String(), "host_script_migration_pending") {
+		t.Fatalf("write admitted before migration: %d %s", got.Code, got.Body.String())
+	}
+	if got := request(http.MethodPost, "/v1/self-update/check", true); strings.Contains(got.Body.String(), "host_script_migration_pending") {
+		t.Fatal("recovery/update control blocked by script migration")
+	}
+	ready = true
+	if got := request(http.MethodPost, "/v1/docker/tasks", true); strings.Contains(got.Body.String(), "host_script_migration_pending") {
+		t.Fatal("write remains blocked after migration")
+	}
+}
+
 func TestDockerTaskStorageUnavailableIsNotRunningConflict(t *testing.T) {
 	server := testServer(t)
 	// This test server has no configured Docker job store. No host action runs.

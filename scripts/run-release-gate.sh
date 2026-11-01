@@ -13,9 +13,7 @@ if [ "${1:-}" = --github-hosted ]; then
   test "$(node --version)" = v24.22.1
   export VERIFY_BASE_REF="$3"
   make verify-release
-  docker run --rm -e KPANEL_APP_CONF_TEST_ROOTFS=1 -v "$PWD:/src:ro" \
-    bash:5.2.37-alpine3.22@sha256:3bee76a96d86d5d2d5efc7c1c570e5a7c95db22348a26944e0e546fa174e3324 \
-    bash /src/packaging/tests/app-conf-lifecycle.sh /src
+  bash packaging/tests/app-conf-legacy-migration.sh "$PWD"
   sudo -E bash packaging/tests/image-e2e.sh kejilion-panel:verify
   echo "release_gate_runner=pass commit=$2 environment=github-hosted"
   exit 0
