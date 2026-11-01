@@ -166,3 +166,11 @@ Agent 将固定回执 `renewal_adapter_unavailable` 映射为 `site_certificate_
 ### 2026-10-31 WAF 固定来源修正
 
 配套变更集 `waf-pin-correction-20261031`（`scriptLinkageState=coupled`）：受管脚本更新至已公开的 `kejilion/sh@6f6d8445b3e0884dc96035879b8d76ff97a175b3`，根/CN 脚本 SHA-256 均为 `fe9625222ac3ffa300de131d4f8a9da212a3ca125054ae4a0d658f69c70508b5`。相对此前 `b408d60d7ed1c9a935bb1ff0d6e41b73469898ff`，两份脚本仅将错误的 WAF 提交号 `4269829b5be389aa08c22a0c19915a5a451a7e2f` 改为 `42698292499f6e6ba4ebe4f833e164805e6b5641`，修复首次启用下载 `configure.py` 返回 HTTP 404；七文件摘要、机器协议、脚本选择优先级和 WAF 策略不变。旧版本与以上历史记录保留供回滚追溯。本次镜像固定此已公开修订；公共文件下载与摘要验证不代表真实宿主启用/迁移成功，公开版本及验证范围以对应发布验收记录为准。
+
+### 2026-11-01 LinuxMirrors 后续预览候选
+
+变更集 `linuxmirrors-preview-20261101`，`scriptLinkageState=coupled`。下一预览候选固定兼容脚本 `kejilion/sh@36ad5974361808f78befa1ddc1f1ec0933b20fd4`，根 SHA-256 `8ff0e205246f3eaac9bc83f219ac0d4d9cebba3b4adae4deb8c0f35b5468a2da`、CN `cbdca4529699e0a5bfe06c1944c30468915d4b5734c50438b43fd7d19a788f23`；该本地兼容提交在 rc.1 的 `5b8327f` 基线上重放已公开修复 `38b9fcd` 及其 Armbian 前置 `ed58dea`。保留 FastAdmin 实现、固定模板及七文件 WAF 清单，未采用脚本主线其余更新。
+
+兼容入口先校验系统调优固定上游下载的原始摘要，再在临时副本替换 LinuxMirrors 非通用 ASCII 字符类；保留参数、stdin 与退出状态。Armbian 跳过软件源替换，不跳过其余更新动作。根/CN 同步、八语言语法和正则兼容、FastAdmin smoke 的精确本地证据由发布交付包保存；完整真机换源、Docker 安装、Linux CI/L3 与公开产物尚未验证。
+
+此兼容脚本目前仅有本地提交，尚未公开；必须先在脚本仓库本地合入已确认的 main 并仅推送 main，再核对公开字节，之后才能冻结并发布 KPanel。这里记录候选身份，不代表脚本或 KPanel 已发布。rc.1 的脚本及公开产物保持不变。

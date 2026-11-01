@@ -6,13 +6,13 @@
   "sourceManifestSha256": "3165b3c3e3fcdefe8dc52fba19a0a872eb26238692d6fedff4db2fc48ecf2580",
   "selectedGraphSha256": "b28b6ce7c6d851577e77a9abf33319be3a0e3ae727fb3ef3640d72663813d75b",
   "buildTargetFilesSha256": {
-    "Dockerfile": "bf4a04887d57064645fd0a2f969796d06cfe05627edefdcd3a186adb4aea09b5",
+    "Dockerfile": "fd3d530b9ae03b5742c44963d02c769f984da5f68487d51050770bc43a32cf7e",
     ".github/workflows/release.yml": "f2179cdc8358290e826f92c27316b265dade18275d1e9b89f83b0917f9d73bdc",
     "scripts/build-mcp-clients.sh": "29b0e82668f585aa46d10432912e1050954430cfac6a0550dd408d728979e113",
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
   "closureSha256": "b29862491f453298c34eef29ab773700a3afd9bdb96115afdb3d6876977bb6b7",
-  "firstPartySourceSha256": "07d19f40ed6537754c2e1929109de8f93e16b3a1617e122b8ddd1ba1f73bc52d",
+  "firstPartySourceSha256": "eca950a304d0a3c1facf56cc2418488c96abfbf8b4b9f2626ef721b78d3b3efc",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -146,7 +146,9 @@
     "v128IdentityQualificationEvidenceSha256": "39630b65cf12bf7c94e1abcb0b5e6bc34dd2ff6bf03e8bfc78a6667555e83dc9",
     "v128IdentityQualificationSummary": "Final v1.28.0 candidate source-scope requalification at 7a4bf88c4ca893fc92a1785aaba76c01275ad92a: canonical Go 1.27.3 inventory recomputed 1,255 first-party Go files and all six actual/original production closures; each pair is equivalent. The only six Go paths changed from main are within internal/filemanager. Five runtime files match the independent built-in blind-review package snapshot at e6240307; the single test-only change was covered by the candidate diff review. Source and closure identities are rebound to f90b5b04a0e14bdb2a070fc17e70309c484ca283fea61a7c95d8508c61f50430 and b29862491f453298c34eef29ab773700a3afd9bdb96115afdb3d6876977bb6b7. Existing 37 findings/dispositions and the 2026-10-25/2026-11-08 observation window remain unchanged. This identity qualification is not a scanner, CI, L2/L3 or publication result; candidate CI run 40910122349 correctly retains the stale-source-identity failure and a fresh exact-candidate run is required.",
     "wafPinReviewEvidenceSha256": "4f89d137a3f6d0bdedc68b5b9f3c6f66a1b324cad0614cda3079e57300ae6404",
-    "wafPinReviewSummary": "FastAdmin allowlist/selector and version literal plus Windows-only bounded move retry and regression tests. No new production imports, GoFiles, modules or Linux production closures. Exact baseline inventory reproduced with seven prior file hashes. Managed script pin, original findings, expiry and dispositions unchanged."
+    "wafPinReviewSummary": "FastAdmin allowlist/selector and version literal plus Windows-only bounded move retry and regression tests. No new production imports, GoFiles, modules or Linux production closures. Exact baseline inventory reproduced with seven prior file hashes. Managed script pin, original findings, expiry and dispositions unchanged.",
+    "rc129rc2PreparationEvidenceSha256": "fba2dc8983ad1f3d094ab1a732c183560f5cf7127309d57d7f4f7079cd324a2a",
+    "rc129rc2PreparationSummary": "Local preparation only. The paired compatibility script must be published through sh main before KPanel candidate push/L3/publication. No scanner, Linux CI/L3, native host install, or publication pass is implied. Only the version Go literal and Docker managed-script pin/checksum change; the exact prior inventory was reproduced."
   },
   "findings": [
     {
