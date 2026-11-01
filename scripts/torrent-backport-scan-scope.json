@@ -6,7 +6,7 @@
   "sourceManifestSha256": "3165b3c3e3fcdefe8dc52fba19a0a872eb26238692d6fedff4db2fc48ecf2580",
   "selectedGraphSha256": "b28b6ce7c6d851577e77a9abf33319be3a0e3ae727fb3ef3640d72663813d75b",
   "buildTargetFilesSha256": {
-    "Dockerfile": "fd3d530b9ae03b5742c44963d02c769f984da5f68487d51050770bc43a32cf7e",
+    "Dockerfile": "8f46fd207a3454b3ee7d9124ffb3309f960d696daec32de0885899ba4f2a7601",
     ".github/workflows/release.yml": "f2179cdc8358290e826f92c27316b265dade18275d1e9b89f83b0917f9d73bdc",
     "scripts/build-mcp-clients.sh": "29b0e82668f585aa46d10432912e1050954430cfac6a0550dd408d728979e113",
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
@@ -148,7 +148,9 @@
     "wafPinReviewEvidenceSha256": "4f89d137a3f6d0bdedc68b5b9f3c6f66a1b324cad0614cda3079e57300ae6404",
     "wafPinReviewSummary": "FastAdmin allowlist/selector and version literal plus Windows-only bounded move retry and regression tests. No new production imports, GoFiles, modules or Linux production closures. Exact baseline inventory reproduced with seven prior file hashes. Managed script pin, original findings, expiry and dispositions unchanged.",
     "rc129rc2PreparationEvidenceSha256": "fba2dc8983ad1f3d094ab1a732c183560f5cf7127309d57d7f4f7079cd324a2a",
-    "rc129rc2PreparationSummary": "Local preparation only. The paired compatibility script must be published through sh main before KPanel candidate push/L3/publication. No scanner, Linux CI/L3, native host install, or publication pass is implied. Only the version Go literal and Docker managed-script pin/checksum change; the exact prior inventory was reproduced."
+    "rc129rc2PreparationSummary": "Local preparation only. The paired compatibility script must be published through sh main before KPanel candidate push/L3/publication. No scanner, Linux CI/L3, native host install, or publication pass is implied. Only the version Go literal and Docker managed-script pin/checksum change; the exact prior inventory was reproduced.",
+    "rc129rc2CommandInstallEvidenceSha256": "8ab072415d16a72f4e98e96cc6b3f2ddc253900b33f66c861ae8e35cf7f99b83",
+    "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged."
   },
   "findings": [
     {
