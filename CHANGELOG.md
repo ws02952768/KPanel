@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.29.0-rc.3] - 2026-11-01
+
+### Fixed
+- 修复 AI 多会话同时创建任务时的 SQLite 锁冲突，保留同一会话只能有一个活动任务的限制。
+- 修复 Nginx 首次安装的同名 install 函数冲突；重复安装保留已有 Nginx、数据库和 WAF 配置，初始化失败时停止后续启动。
+- 内置脚本兼容 LinuxMirrors 的 ASCII 正则写法，保留参数、交互输入和失败状态，修复换源及 Docker 安装入口的正则兼容报错。
+
+### Changed
+- 设置中的 HTTPS 域名输入区显示 DNS 解析记录指引；公网地址查询失败时仍可继续填写域名。
+
+### Compatibility
+- Armbian 保留既有软件源，避免被当作 Debian/Ubuntu 自动替换；继续保留 FastAdmin PHP74 模板与原 WAF 版本。
+
+### Upgrade Notes
+- 本版为预览版，加入预览不会自动安装，退出不会自动降级；更新前备份 Panel 与 Agent 数据并检查在途任务。
+- FastAdmin 站点仍需完成安装页初始化并保存随机后台入口；已有配置和数据不需要额外迁移。
+
+
 ## [1.29.0-rc.2] - 2026-11-01
 
 ### Fixed

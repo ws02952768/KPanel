@@ -12,7 +12,7 @@
     "Makefile": "f651d8ce2f10adc487118e1ccb476615347661922a8c8ef529f1b8013da5d53e"
   },
   "closureSha256": "b29862491f453298c34eef29ab773700a3afd9bdb96115afdb3d6876977bb6b7",
-  "firstPartySourceSha256": "eca950a304d0a3c1facf56cc2418488c96abfbf8b4b9f2626ef721b78d3b3efc",
+  "firstPartySourceSha256": "1093d537602653c43fa5a8521c3e730f8fb5af8db5a8326a4b53932008567136",
   "buildTargetHashEncoding": "UTF-8 with LF line endings",
   "closureEncoding": "SHA256 of JSON.stringify of ordered OS/architecture rows; packages sorted by import path; path, module and selected version; stdlib go1.27.3; main-module packages additionally bind relative sourceDirectory and sorted actual GoFiles.",
   "firstPartySourceEncoding": "SHA256 of JSON.stringify of all cmd/internal Go source path and SHA256 pairs sorted by relative path; contents normalized to UTF-8 LF. All actual main-module production GoFiles must be covered. Generated .pb.go and .proto files or symlinks require a new review.",
@@ -150,7 +150,9 @@
     "rc129rc2PreparationEvidenceSha256": "fba2dc8983ad1f3d094ab1a732c183560f5cf7127309d57d7f4f7079cd324a2a",
     "rc129rc2PreparationSummary": "Local preparation only. The paired compatibility script must be published through sh main before KPanel candidate push/L3/publication. No scanner, Linux CI/L3, native host install, or publication pass is implied. Only the version Go literal and Docker managed-script pin/checksum change; the exact prior inventory was reproduced.",
     "rc129rc2CommandInstallEvidenceSha256": "8ab072415d16a72f4e98e96cc6b3f2ddc253900b33f66c861ae8e35cf7f99b83",
-    "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged."
+    "rc129rc2CommandInstallSummary": "User-requested command install fix included by exact upstream patch replay. Paired script is still local; full Linux CI/L2/L3, native installs and public artifacts remain pending. WAF manifest and FastAdmin functions remain unchanged.",
+    "rc129rc3SQLiteEvidenceSha256": "6e084b6964132430f272cb67641cb03339696d12c79a65bc5e879f992274c6d4",
+    "rc129rc3SQLiteSummary": "Derived source binding only. Fresh exact-candidate Linux CI, six-target original/actual closure inventory, all scanners and full GitHub-hosted L3 remain required. Failed rc.2 publication retained, tag immutable; no rc.2 Release was created. Writer reservation adds no imports, changes no GoFiles or schema; new concurrency test and version literal are the other source changes. Previous canonical source identity was reproduced."
   },
   "findings": [
     {
