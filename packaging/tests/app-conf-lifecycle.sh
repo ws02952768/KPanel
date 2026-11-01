@@ -1244,7 +1244,7 @@ run_license_inheritance
 run_shared_script_bootstrap
 # Exercise the successful interrupted-update branch with a legacy private copy.
 # Dependencies are stubbed in a subshell; cleanup remains the real lifecycle code.
-(
+run_shared_script_interrupted_success() (
 	. "$PROJECT_DIR/packaging/kejilion-app/kpanel.conf"
 	export KJ_KPANEL_LIFECYCLE_LOCK_HELD=1
 	mkdir -p /home/docker/kpanel/update-state/transaction /home/docker/kpanel/bin
@@ -1270,6 +1270,7 @@ run_shared_script_bootstrap
 	rmdir /home/docker/kpanel/bin /home/docker/kpanel/update-state/transaction /home/docker/kpanel/update-state
 	printf '%s\n' 'shared_script_interrupted_success=pass'
 )
+run_shared_script_interrupted_success
 run_mount_detection
 run_lifecycle
 run_symlinked_docker_root_lifecycle
