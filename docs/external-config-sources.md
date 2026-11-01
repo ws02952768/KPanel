@@ -186,3 +186,12 @@ Agent 将固定回执 `renewal_adapter_unavailable` 映射为 `site_certificate_
 反代安装修复本地候选：`scriptLinkageState=coupled`，变更集 `proxy-install-feedback-20261101`。配套脚本 `kejilion/sh@d2156444add457973d4a84634653aa10cece712f` 已在脚本主线公开，根 SHA-256 `f60a7023ca0d6dd9ee5f3557669675b84ca7e2c0f3de9fe4b8da22e740478235`、CN `d05a3dc5eb33916ce6cd1e377d08f363cbe144ce41298e719eb0d91fd69998a3`；发布准备已重新匿名下载固定 revision 并匹配两份摘要。该可用性核验不代表 KPanel 镜像或真实宿主安装已通过。候选仅传入保留直连参数 `KJ_WEB_PROXY_KEEP_DIRECT=1`，CLI 默认仅在成功后保持原有封锁行为；不新增容器运行探测或协议门槛。依赖准备、失败停止与页面已有进度反馈须绑定精确候选验收；未将本地测试写作公开镜像或真机安装成功。成对回滚基线：KPanel `5948c2f845de2196c93b2b5181347f457f545561`；脚本 `19fceee107041b61ed7453024be1309e95cda4d3`。
 
 本轮 v1.29.0-rc.4 本地组合候选同时纳入共享脚本入口与更新同步：安装、更新写入 `/root/kejilion.sh` 和 `/usr/local/bin/k`，`/usr/bin/k` 指向共享入口；原内容、权限、链接或缺失状态随既有更新事务回退，卸载保留共享脚本。与 rc.3 内置 `496d363` 相比，配套公开脚本还包含 WAF 固定来源 `1ad9ad8e57c83317d4fe1f418054195f653e79cb`、LDNMP 卸载及基础工具调优更新；不再沿用“保留原 WAF 版本”的 rc.3 范围声明。FastAdmin 固定模板及 LinuxMirrors、`command install` 修复保留。完整 L2、精确候选 CI、可信自动化集成、GitHub-hosted L3、隔离升级/反代与公开产物验收尚待完成；本记录不表示已发布或生产已更新。成对回滚使用已发布 KPanel rc.3 `fd7033717f6f47d66277da760e7d255bd85d3c25` 及原内置脚本 `496d3633d850ddc68bcef654b8d9d11054a28a68`；恢复宿主机自定义脚本须使用更新前保存的原件。
+
+
+### 2026-11-02 v1.29.0-rc.5 共享脚本同步预览已公开
+
+上文rc.4组合候选在公开前因真实Linux偏好继承缺陷取消，run41316174091保留取消状态、e91标签保留且没有RC4公开Release。本节以实际RC5结果接续：产品 `d52cd0b073b53000a1a682d1addf69ba937c58be`，`sha256:14e6020e825169d1ce479ce6b155b8252dc5621f29e689643559ecad9e8facd9`，[Release](https://github.com/kejilion/KPanel/releases/tag/v1.29.0-rc.5)，发布run41322833168/attempt1。镜像双架构的script revision/SHA-256与公开d2156444及上述根/CN摘要一致；WAF七文件固定1ad9ad8e57c83317d4fe1f418054195f653e79cb。候选CI、可信自动化/主线准入、完整GitHub-hosted L3、公开产物/浏览器已通过；来源资格本身没有替代扫描或公开验收。
+
+RC5按当前SSH脚本重新覆盖旧私有模板的地区/统计偏好（双向切换与global缺失回退已实际验证）。首次旧生命周期升级由新Agent在原锁和事务提交后同步共享入口，短转发文件兼容旧自动更新单元；提交后残留快照必须清理后才恢复写入，下一次失败更新恢复本次更新前版本。精确RC3生命周期、真实flock/故障文件写入/重启清理/下一次更新已进入canonical回归。没有发布apps模板来规避已安装旧函数。真实宿主反代/ACME、全LDNMP/换源及服务崩溃仍待专项准入，不把rootfs或公开浏览器夹具称为这些实测。
+
+FastAdmin固定模板及LinuxMirrors、command install修复保留；前序Linux证据按精确函数字节复用。稳定默认仍v1.28.0，生产未部署，原rc.3与自定义脚本更新前备份保留回滚；详细状态见[本版验收](release-v1.29.0-rc.5-acceptance.md)。

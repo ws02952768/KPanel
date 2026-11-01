@@ -5,9 +5,18 @@
 > 不再作为当前门槛。run-41 已按用户要求封存 incomplete，没有 confirmed 新发现；不宣称完整覆盖或风险关闭。
 > 产品验证与已证实漏洞处置要求继续有效。
 
-- 复核日期：`2026-11-01`
-- 基线提交：`fd7033717f6f47d66277da760e7d255bd85d3c25`
+- 复核日期：`2026-11-02`
+- 基线提交：`d52cd0b073b53000a1a682d1addf69ba937c58be`
 - 基线版本：`v1.28.0`
+
+### 2026-11-02 v1.29.0-rc.5 域名反馈与共享脚本升级预览已公开
+
+[v1.29.0-rc.5](https://github.com/kejilion/KPanel/releases/tag/v1.29.0-rc.5) 已公开，产品 `d52cd0b073b53000a1a682d1addf69ba937c58be`，版本/preview digest `sha256:14e6020e825169d1ce479ce6b155b8252dc5621f29e689643559ecad9e8facd9`，Release ID 430712455。发布run41322833168/attempt1的候选CI、完整GitHub-hosted L3、main/tag、最终主线CI、19附件、双架构与公开浏览器150项全部成功；稳定默认仍v1.28.0，生产未部署。详见[本版验收](release-v1.29.0-rc.5-acceptance.md)。
+
+- 设置/应用市场显示域名绑定阶段、日志与错误；反代补齐Python/flock，失败停止且保留KPanel直连。与SSH共享宿主k，安装/更新同步固定公开脚本d2156444及WAF1ad9ad8e；FastAdmin、LinuxMirrors、command install和AI并发修复保留。
+- 首次旧生命周期升级与提交后旧回退快照问题均在发布者候选修复，真实rootfs锁/故障/后续回退回归进入canonical CI/L3。旧79a0撤回、初始独立HIGH/FAIL原件保留；旧RC4恢复10/10及元数据4/4复核已保留；其后偏好缺陷使RC4发布在公开前取消，标签e91保留。本轮RC5独立复核5/5及3人工排除通过，真实Linux覆盖V6/true→default/false及入口缺失回退，无新阻断。
+- 源码1258文件与六目标闭包逐项回读；Web332文件3351通过/6既有skip。最终mock重做成功/证书失败/Enter/OpenList反馈与14px/21px，窄屏与既有截图仅按web/src完全相同复用；本轮无新截图。
+- 真实宿主ACME/LDNMP/全换源、服务崩溃与物理ARM64仍需后续准入。既有PHP74、AI总量预算、Windows历史启动、rc.3首次终端根因和有期安全待办不因本版通过关闭。六个来源归档已回读，作者在用资源保留；临时测试环境按所有权清理。
 
 ### 2026-11-01 v1.29.0-rc.3 脚本兼容、AI并发与 HTTPS 指引预览已公开
 
