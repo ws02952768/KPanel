@@ -153,7 +153,7 @@ func (systemRecipeJobRunner) Run(ctx context.Context, name string, arguments ...
 
 func (systemRecipeJobRunner) LookPath(name string) (string, error) {
 	switch name {
-	case "systemd-run", "systemctl", "start-stop-daemon", "rc-service", "docker":
+	case "systemd-run", "systemctl", "start-stop-daemon", "rc-service":
 	default:
 		return "", errors.New("background control executable is not allowed")
 	}
@@ -273,7 +273,6 @@ func (m *Manager) ProxyWritable() error {
 
 func (m *Manager) proxyWritable(useCustomCertificate bool) error {
 	return m.directSiteWritableWithCustomCertificate(useCustomCertificate,
-		`KPANEL_WEB_PROXY_ACCESS_PROTOCOL_VERSION="1"`,
 		"KJ_WEB_NONINTERACTIVE",
 		"KJ_WEB_INTERACTIVE",
 		"KJ_WEB_RECIPE",
@@ -521,8 +520,6 @@ func proxyInvocation(domain, host, port string) scriptSiteInvocation {
 			"KJ_WEB_DOMAIN",
 			"KJ_WEB_PROXY_HOST",
 			"KJ_WEB_PROXY_PORT",
-			`KPANEL_WEB_PROXY_ACCESS_PROTOCOL_VERSION="1"`,
-			`kpanel_proxy_cli "$@"`,
 			"fd|rp|反代)",
 			`ldnmp_Proxy "$@"`,
 		},
@@ -1237,12 +1234,6 @@ func (m *Manager) runRecipeJob(ctx context.Context, id string, invocation script
 		m.failRecipeJob(job, "failed", waitErr)
 		return
 	}
-	if job.Recipe == "reverse-proxy" {
-		if err := verifyProxyRuntime(ctx, systemRecipeJobRunner{}); err != nil {
-			m.failRecipeJob(job, "runtime_failed", err)
-			return
-		}
-	}
 	items, err := m.discoverer.Discover()
 	if err != nil {
 		m.failRecipeJob(job, "reconcile_failed", err)
@@ -1361,8 +1352,6 @@ func (m *Manager) failRecipeJob(job RecipeJob, stage string, cause error) {
 
 func recipeFailureMessage(job RecipeJob, stage string, cause error) string {
 	switch {
-	case stage == "runtime_failed":
-		return "反向代理未通过运行检查：请在网站任务终端查看 Nginx 安装、依赖和配置错误；不要关闭面板直连端口"
 	case errors.Is(cause, context.DeadlineExceeded):
 		return "一键建站执行超时并已终止，请核对当前服务器网络和实际站点产物"
 	case stage == "script_unavailable":
