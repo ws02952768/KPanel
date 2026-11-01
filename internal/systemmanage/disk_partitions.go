@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -579,9 +578,6 @@ func trustedDiskScript(content []byte) bool {
 
 func findKejilionDiskScript() (string, error) {
 	candidates := []string{"/usr/local/bin/k"}
-	if candidate, err := exec.LookPath("k"); err == nil {
-		candidates = append(candidates, candidate)
-	}
 	seen := make(map[string]bool, len(candidates))
 	for _, candidate := range candidates {
 		candidate = filepath.Clean(candidate)

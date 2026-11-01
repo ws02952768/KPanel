@@ -300,7 +300,7 @@ func runDelayedReboot(arguments []string) error {
 func runSelfUpdate(arguments []string) error {
 	flags := flag.NewFlagSet("kejilion-agent self-update-run", flag.ContinueOnError)
 	stateDir := flags.String("state-dir", "/home/docker/kpanel/update-state", "automatic update state directory")
-	scriptPath := flags.String("script", "/home/docker/kpanel/bin/kejilion.sh", "managed kejilion.sh path")
+	scriptPath := flags.String("script", "/usr/local/bin/k", "shared host kejilion.sh path")
 	agentPath := flags.String("agent", "/home/docker/kpanel/bin/kejilion-agent", "installed Agent path")
 	lifecyclePath := flags.String("lifecycle", "/home/docker/kpanel/bin/kpanel.conf", "pinned KPanel lifecycle config path")
 	if err := flags.Parse(arguments); err != nil {

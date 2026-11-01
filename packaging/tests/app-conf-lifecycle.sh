@@ -1242,6 +1242,34 @@ mkdir -p /home/docker/kpanel
 bash "$PROJECT_DIR/packaging/tests/app-conf-lock-compat.sh" "$PROJECT_DIR"
 run_license_inheritance
 run_shared_script_bootstrap
+# Exercise the successful interrupted-update branch with a legacy private copy.
+# Dependencies are stubbed in a subshell; cleanup remains the real lifecycle code.
+(
+	. "$PROJECT_DIR/packaging/kejilion-app/kpanel.conf"
+	export KJ_KPANEL_LIFECYCLE_LOCK_HELD=1
+	mkdir -p /home/docker/kpanel/update-state/transaction /home/docker/kpanel/bin
+	printf '%s\n' 'shared-script' >/usr/local/bin/k
+	printf '%s\n' 'legacy-script' >/home/docker/kpanel/bin/kejilion.sh
+	kpanel_detect_init_system() { :; }
+	kpanel_validate_automatic_storage() { :; }
+	kpanel_transaction_value() {
+		case "$1" in
+			phase) echo verifying ;;
+			*-preexisted) echo false ;;
+			*) echo fixture ;;
+		esac
+	}
+	kpanel_automatic_target_ready() { :; }
+	kpanel_complete_automatic_transaction() { :; }
+	kpanel_install_pending_lifecycle() { :; }
+	kpanel_clear_update_files() { :; }
+	kpanel_recover_automatic_update
+	test ! -e /home/docker/kpanel/bin/kejilion.sh
+	grep -Fx shared-script /usr/local/bin/k >/dev/null
+	rm /usr/local/bin/k
+	rmdir /home/docker/kpanel/bin /home/docker/kpanel/update-state/transaction /home/docker/kpanel/update-state
+	printf '%s\n' 'shared_script_interrupted_success=pass'
+)
 run_mount_detection
 run_lifecycle
 run_symlinked_docker_root_lifecycle
